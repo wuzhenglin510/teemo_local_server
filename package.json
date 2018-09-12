@@ -1,0 +1,22 @@
+{
+  "name": "teemo_local_server",
+  "version": "1.0.0",
+  "description": "teemo local server",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wuzhenglin510/teemo_local_server.git"
+  },
+  "author": "leo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wuzhenglin510/teemo_local_server/issues"
+  },
+  "homepage": "https://github.com/wuzhenglin510/teemo_local_server#readme",
+  "devDependencies": {
+    "electron": "^2.0.0"
+  }
+}
