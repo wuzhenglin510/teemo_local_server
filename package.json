@@ -18,5 +18,8 @@
   "homepage": "https://github.com/wuzhenglin510/teemo_local_server#readme",
   "devDependencies": {
     "electron": "^2.0.0"
+  },
+  "dependencies": {
+    "node_power_server": "^1.1.12"
   }
 }

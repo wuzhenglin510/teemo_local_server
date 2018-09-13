@@ -7,16 +7,19 @@
   <link rel="stylesheet" type="text/css" href="../../thirdpart/bootstrap/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="../../thirdpart/font/css/open-iconic-bootstrap.css">
   <link rel="stylesheet" type="text/css" href="index.css" />
+  
 </head>
 
 <body>
-  <div style="position: absolute; left:0px; top:0px" class="loader">
-    <div class="face">
-      <div class="circle"></div>
-    </div>
-    <div class="face">
-      <div class="circle"></div>
-    </div>
+  <div id="online_animation" class="my-hide">
+      <div style="position: absolute; left:0px; top:0px" class="loader">
+          <div class="face">
+            <div class="circle"></div>
+          </div>
+          <div class="face">
+            <div class="circle"></div>
+          </div>
+        </div>
   </div>
   <div style="position: absolute; left:50px; top:50px">
     <img src="../../img/100.png" alt="">
@@ -25,20 +28,29 @@
     <h5>Teemo</h5>
     <h6>Smart UI Scenerio</h6>
   </div>
-  <div style="position: absolute; bottom:20px; left:80px">
-      <span class="badge badge-success">online<span class="oi oi-wifi"></span></span>
+  <div style="position: absolute; bottom:20px; left:65px">
+      <div id="online_status" class="my-hide">
+          <span class="badge badge-success">online&nbsp;<span class="oi oi-wifi"></span></span>
+      </div>
+      <div id="offline_status">
+          <span class="badge badge-danger">offline&nbsp;<span class="oi oi-rain"></span></span>
+      </div>
+      <div id="starting_status" class="my-hide">
+          <span class="badge badge-primary">pending&nbsp;<span class="oi oi-pulse"></span></span>
+      </div>
+      
   </div>
 
   <div style="position: absolute; right:10px; top:80px; text-align: center">
-      <input class="form-control form-control-sm" style="width: 170px" type="text" placeholder="specify proj output dir">
+      <input id='in_dir' class="form-control form-control-sm" style="width: 170px" type="text" placeholder="specify proj output dir">
       <br/>
-      <button type="button" class="btn btn-primary">start</button>
-      <button type="button" class="btn btn-danger">stop</button>
+      <button onclick="toStart()" type="button" class="btn btn-primary" style="width:80px; height:80px; border-radius: 100px">START</button>
   </div>
 
   <script src="../../thirdpart/bootstrap/jquery-3.3.1.slim.min.js"></script>
   <script src="../../thirdpart/bootstrap/popper.min.js"></script>
   <script src="../../thirdpart/bootstrap/bootstrap.min.js"></script>
+  <script src="./index.js"></script>
 
 </body>
 

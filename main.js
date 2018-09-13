@@ -8,9 +8,13 @@ let mainWindow
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 410, height: 300})
-  mainWindow.setResizable(false)
+  mainWindow.setResizable(false);
+  mainWindow.setMenu(null);
+  mainWindow.webContents.openDevTools();
+  mainWindow.webContents.reloadIgnoringCache()
 
-  // and load the index.html of the app.
+
+  // and load the index.·html of the app.
   mainWindow.loadFile('./src/page/index/index.html')
 
   // Open the DevTools.

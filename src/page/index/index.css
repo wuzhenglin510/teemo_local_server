@@ -2,6 +2,10 @@ body {
 	background-color: black;
 }
 
+.my-hide {
+    display: none;
+}
+
 .loader {
     width: 20em;
     height: 20em;
@@ -72,3 +76,6 @@ body {
         transform: rotate(1turn);
     }
 }
+
+
+
