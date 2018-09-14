@@ -154,11 +154,16 @@
 }
 
 .teemo-one-step-container {
-    min-height: 100px;
+    padding: 30px 10px 10px 10px;
+    min-height: 60px;
     background-color: #0000000f;
     border-radius: 10px;
     margin-bottom: 10px;
     position: relative;
+    font-size: 10px;
+    letter-spacing: normal;
+    color: black;
+    text-align: left;
 }
 
 .teemo-one-container-close {
@@ -173,6 +178,7 @@
     height: 18px;
     background-color: #efdada;
     color: red;
+    text-align: center;
 }
 
 .teemo-one-container-close:hover {

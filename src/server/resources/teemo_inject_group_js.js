@@ -1,12 +1,4 @@
-function teemoCreatePrepare() {
-    var prepare = document.createElement("DIV");
-    prepare.id = 'teemo-waiting-finish';
-    prepare.className = "teemo-waiting-finish teemo-hide";
-    prepare.innerHTML = `<h1 class="teemo-prepare">渲染中，请稍等</h1>`;
-    document.body.appendChild(prepare);
-}
-
-function teemoCreateToolbar() {
+function teemoCreateGroupToolbar() {
     var injectedHTML = document.createElement("DIV");
     injectedHTML.id = 'teemoContainer';
     injectedHTML.className = "teemo-env";
@@ -18,7 +10,7 @@ function teemoCreateToolbar() {
         <div id="teemo-close" class="teemo-close">X</div>
   </div>
   <div class="teemo-input-div">
-        <input class="teemo-input" type="text" placeholder="Input Step Group Name" style="background: #a3d1ff;" />
+        <input id="teemo-group-name" class="teemo-input" type="text" placeholder="Input Step Group Name" style="background: #a3d1ff;" />
   </div>
   <div class="teemo-seperator-line"></div>
   <div class="teemo-steps-container">
@@ -27,27 +19,7 @@ function teemoCreateToolbar() {
   <div class="teemo-seperator-line"></div>
   <div id="teemo-injectedBox">
 
-    <div class="teemo-one-step-container">
-        <div class="teemo-one-container-close">X</div>
-    </div>
-    <div class="teemo-one-step-container">
-        <div class="teemo-one-container-close">X</div>
-    </div>
-    <div class="teemo-one-step-container">
-        <div class="teemo-one-container-close">X</div>
-    </div>
-    <div class="teemo-one-step-container">
-        <div class="teemo-one-container-close">X</div>
-    </div>
-    <div class="teemo-one-step-container">
-        <div class="teemo-one-container-close">X</div>
-    </div>
-    <div class="teemo-one-step-container">
-        <div class="teemo-one-container-close">X</div>
-    </div>
-    <div class="teemo-one-step-container">
-        <div class="teemo-one-container-close">X</div>
-    </div>
+
 
   </div>
 </div>
@@ -76,6 +48,11 @@ function teemoCreateToolbar() {
 
     teemoDragBoxBar.addEventListener('mouseup', function(e) {
         mouseupHandler();
+    })
+
+    document.getElementById("teemo-group-name").addEventListener('change', function(e) {
+        teemoScenerioData.scenerioName = e.target.value;
+        console.log(`set scenerio name : ${teemoScenerioData.scenerioName}`);
     })
 
     document.addEventListener('mousemove', function(e) {
@@ -118,38 +95,17 @@ function teemoCreateToolbar() {
     }
 }
 
-function teemoTraceOnclickHandler(element) {
-    element.stopPropagation();
-    console.log(element)
-}
 
-function teemoInjectListenerInEveryNode(nextRoots) {
-    if (nextRoots.length == 0) return;
-    nextRoots.forEach(currentNode => {
-        currentNode.addEventListener('click', teemoTraceOnclickHandler, false);
-        teemoInjectListenerInEveryNode(currentNode.childNodes);
-    })
-}
 
 function teemoStart() {
+    teemoFeather = 'group';
     teemoCreatePrepare()
-    document.getElementById('teemo-waiting-finish').className = "teemo-waiting-finish"
-    teemoInjectListenerInEveryNode(document.body.childNodes)
+    document.getElementById('teemo-waiting-finish').className = "teemo-waiting-finish";
+    teemoInjectListenerInEveryNode(document.body.childNodes);
     setTimeout(() => {
         document.getElementById('teemo-waiting-finish').className = "teemo-hide" ;
     }, 1000)
-    teemoCreateToolbar();
+    teemoCreateGroupToolbar();
 }
 
 teemoStart()
-
-
-
-
-
-
-
-
-
-
-
