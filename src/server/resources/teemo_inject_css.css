@@ -184,3 +184,19 @@
 .teemo-one-container-close:hover {
     background-color: #5a1717
 }
+
+.teemo-step-card-value {
+    padding: 0px !important;
+    width: 65% !important;
+    border: 0px !important;
+    font-size: 1px !important;
+    margin-left: 10px !important;
+}
+
+.teemo-step-card-tips {
+    padding: 0px !important;
+    width: 65% !important;
+    margin-left: 4px !important;
+    border: 0px !important;
+    font-size: 1px !important;
+}

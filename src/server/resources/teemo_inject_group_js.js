@@ -101,11 +101,12 @@ function teemoStart() {
     teemoFeather = 'group';
     teemoCreatePrepare()
     document.getElementById('teemo-waiting-finish').className = "teemo-waiting-finish";
-    teemoInjectListenerInEveryNode(document.body.childNodes);
+    teemoInjectListenerInEveryNode(document.body.childNodes, document.body);
     setTimeout(() => {
         document.getElementById('teemo-waiting-finish').className = "teemo-hide" ;
     }, 1000)
     teemoCreateGroupToolbar();
+    rebuildStepCards();
 }
 
 teemoStart()

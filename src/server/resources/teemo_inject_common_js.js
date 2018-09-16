@@ -3,9 +3,13 @@ var teemoScenerioData = {
     scenerioName: null,
     before: null,
     steps: [
-
+        {
+            action: 'go',
+            url: document.URL
+        }
     ]
 }
+
 
 function teemoCreatePrepare() {
     var prepare = document.createElement("DIV");
@@ -54,12 +58,24 @@ function teemoPost(uri, data) {
 function teemoInjectListenerInEveryNode(nextRoots) {
     if (nextRoots.length == 0) return;
     nextRoots.forEach(currentNode => {
-        currentNode.addEventListener('click', teemoTraceOnclickHandler, false);
         teemoInjectListenerInEveryNode(currentNode.childNodes);
+        currentNode.addEventListener('click', teemoTraceOnclickHandler, false);
         if (currentNode.nodeName.toUpperCase() == "INPUT") {
-            currentNode.addEventListener('change', teemoTraceInputHandler, false);
+            if (currentNode.type.toLowerCase() != "radio" && currentNode.type.toLowerCase() != "checkbox") {
+                currentNode.addEventListener('change', teemoTraceInputHandler, false);
+            }
         }
     })
+}
+
+
+function teemoRemoveStep(idx) {
+    if (idx == 0) {
+        teemoScenerioData.steps.shift();
+    } else {
+        teemoScenerioData.steps = teemoScenerioData.steps.splice(idx, 1);
+    }
+    rebuildStepCards()
 }
 
 function rebuildStepCards() {
@@ -71,18 +87,29 @@ function rebuildStepCards() {
         stepCard.className = "teemo-one-step-container";
         if (step.action == 'click') {
             stepCard.innerHTML = `
-            <div id='stepCard_${idx}' class="teemo-one-container-close">X</div>
+            <div id='stepCard_${idx}' class="teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
             <div> 
                 <div>action: ${step.action}</div><br/>
-                <span>xpath:</span><input style="width: 65%;margin-left: 10px;" type="text" value="${step.xpath}"  disable />
+                <span>xpath:</span><input class="teemo-step-card-value" type="text" value="${step.xpath}"  disabled=true /><br/><br/>
+                <span>tips: </span><input class="teemo-step-card-tips" type="text" value="" />
             </div>
         `
         } else if(step.action == 'input') {
             stepCard.innerHTML = `
-            <div id='stepCard_${idx}' class="teemo-one-container-close">X</div>
+            <div id='stepCard_${idx}' class="teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
             <div> 
-                <div>action: ${step.action}</div>
-                <span>value:</span><input style="width: 65%;margin-left: 10px;" type="text" value="${step.value}"  disable />
+                <div>action: ${step.action}</div><br/>
+                <span>value:</span><input class="teemo-step-card-value" type="text" value="${step.value}"  disabled=true /><br/><br/>
+                <span>tips: </span><input class="teemo-step-card-tips" type="text" value="" />
+            </div>
+        `
+        } else if (step.action == 'go') {
+            stepCard.innerHTML = `
+            <div id='stepCard_${idx}' class="teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
+            <div> 
+                <div>action: ${step.action}</div><br/>
+                <span>url:  </span><input class="teemo-step-card-value" type="text" value="${step.url}"  disabled=true /><br/><br/>
+                <span>tips: </span><input class="teemo-step-card-tips" type="text" value="" />
             </div>
         `
         }
