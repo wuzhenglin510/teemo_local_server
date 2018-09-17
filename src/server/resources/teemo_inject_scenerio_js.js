@@ -1,4 +1,4 @@
-function teemoCreateGroupToolbar() {
+function teemoCreateScenerioToolbar() {
     var injectedHTML = document.createElement("DIV");
     injectedHTML.id = 'teemoContainer';
     injectedHTML.className = "teemo teemo-env";
@@ -11,7 +11,7 @@ function teemoCreateGroupToolbar() {
   </div>
   <div id="teemo-close" class="teemo teemo-close">X</div>
   <div class="teemo teemo-input-div">
-        <input id="teemo-group-name" class="teemo teemo-input" type="text" placeholder="Input Step Group Name" style="background: #a3d1ff;" />
+        <input id="teemo-scenerio-name" class="teemo teemo-input" type="text" placeholder="Input Scenerio Name" style="background: #a3d1ff;" />
   </div>
   <div class="teemo teemo-seperator-line"  ></div>
   <div class="teemo teemo-steps-container"  >
@@ -27,7 +27,7 @@ function teemoCreateGroupToolbar() {
   <div class="teemo teemo-seperator-line"  ></div>
   <div class="teemo teemo-steps-container"  >
         steps
-        <button id="teemo-save" class="teemo teemo-sava" onclick="createGroup()">save</button>
+        <button id="teemo-save" class="teemo teemo-sava" onclick="createScenerio()">save</button>
   <div>
   <div class="teemo teemo-seperator-line"  ></div>
   <div id="teemo-injectedBox" class="teemo" >
@@ -63,7 +63,7 @@ function teemoCreateGroupToolbar() {
         mouseupHandler();
     })
 
-    document.getElementById("teemo-group-name").addEventListener('change', function(e) {
+    document.getElementById("teemo-scenerio-name").addEventListener('change', function(e) {
         teemoScenerioData.scenerioName = e.target.value;
     })
 
@@ -108,9 +108,9 @@ function teemoCreateGroupToolbar() {
 }
 
 
-function createGroup() {
+function createScenerio() {
     console.log(teemoScenerioData)
-    teemoPost('http://localhost:6385/group.create', teemoScenerioData).then(result => {
+    teemoPost('http://localhost:6385/scenerio.create', teemoScenerioData).then(result => {
         switch(result.code) {
             case 0: {
                 alert('save successfully');
@@ -141,14 +141,14 @@ function listGroup() {
 
 
 function teemoStart() {
-    teemoFeather = 'group';
+    teemoFeather = 'scenerio';
     teemoCreatePrepare()
     document.getElementById('teemo-waiting-finish').className = "teemo teemo-waiting-finish";
     teemoInjectListenerInEveryNode(document.body.childNodes, document.body);
     setTimeout(() => {
         document.getElementById('teemo-waiting-finish').className = "teemo teemo-hide" ;
     }, 1000)
-    teemoCreateGroupToolbar();
+    teemoCreateScenerioToolbar();
     listGroup();
     rebuildStepCards();
 }

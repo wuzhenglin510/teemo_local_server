@@ -1,0 +1,20 @@
+const {By, until, Key} = require('selenium-webdriver');
+const assert = require('assert');
+
+describe('<%= scenerioName %>', function () {
+
+    this.timeout(3600000);
+
+    before(async function () {
+        <% before.forEach(function(code){ %>
+            <%- code %>
+        <% }); %>
+    })
+
+    it('<%= scenerioName %>', async function () {
+        <% steps.forEach(function(code){ %>
+            <%- code %>
+        <% }); %>
+    });
+
+})

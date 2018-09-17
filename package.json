@@ -4,7 +4,9 @@
   "description": "teemo local server",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package": "electron-packager ./ myapp --out ./OutApp --version 2.0.0 --overwrite --icon=./ico.ico"
+  
   },
   "repository": {
     "type": "git",
@@ -17,9 +19,13 @@
   },
   "homepage": "https://github.com/wuzhenglin510/teemo_local_server#readme",
   "devDependencies": {
-    "electron": "^2.0.0"
+    "electron": "^2.0.0",
+    "electron-packager": "^9.1.0"
   },
   "dependencies": {
-    "node_power_server": "^1.1.12"
+    "ejs": "^2.6.1",
+    "node_power_server": "^1.1.12",
+    "selenium-webdriver": "^4.0.0-alpha.1",
+    "shelljs": "^0.8.2"
   }
 }

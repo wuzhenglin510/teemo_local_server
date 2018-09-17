@@ -8,6 +8,7 @@ module.exports = async () => {
             staticRoot: `${path.join(__dirname, "./resources")}`,
             handlerDir: `${path.join(__dirname, "./api")}`
         });
+        server.middlewareManage.add("/*", PowerServer.Middleware.CrossDomain(), PowerServer.Middleware.Constant.ExecBefore)
         server.on('started', (msg) => {
             console.log(msg)
             resolve(msg)

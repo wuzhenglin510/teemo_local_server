@@ -1,3 +1,7 @@
+.teemo {
+
+}
+
 .teemo-env {
     color: black;
     text-align: center;
@@ -146,14 +150,35 @@
 }
 
 .teemo-steps-container {
-    word-spacing: 12px;
-    letter-spacing: 13px;
     margin-top: 4px;
     font-size: 16px;
     color: #00000078;
+    text-align: left
 }
 
+.teemo-group {
+    width: 60%;
+}
+
+.teemo-sava {
+    float: right;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid;
+    border-radius: 10px;
+    width: 40%;
+    border-color: #a2d3ff;
+    color: #8c76ff;
+    background-color: #c2deff;
+}
+
+.teemo-sava:hover {
+    background-color: #1480ffbd;
+}
+
+
 .teemo-one-step-container {
+    font-family: sans-serif !important;
     padding: 30px 10px 10px 10px;
     min-height: 60px;
     background-color: #0000000f;
@@ -165,6 +190,8 @@
     color: black;
     text-align: left;
 }
+
+
 
 .teemo-one-container-close {
     position: absolute;
@@ -187,7 +214,7 @@
 
 .teemo-step-card-value {
     padding: 0px !important;
-    width: 65% !important;
+    width: 60% !important;
     border: 0px !important;
     font-size: 1px !important;
     margin-left: 10px !important;
@@ -195,7 +222,7 @@
 
 .teemo-step-card-tips {
     padding: 0px !important;
-    width: 65% !important;
+    width: 60% !important;
     margin-left: 4px !important;
     border: 0px !important;
     font-size: 1px !important;

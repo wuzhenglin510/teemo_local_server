@@ -1,5 +1,7 @@
 const fs = require('fs')
 const startServer = require('../../server')
+const shell = require('shelljs')
+const path = require('path')
 
 let status = false;
 let directory = '';
@@ -11,6 +13,9 @@ function toStart() {
     }
     directory = document.getElementById('in_dir').value;
     if (_checkDirExist(directory)) {
+        global.ProjectRoot = directory;
+        shell.mkdir('-p', path.join(ProjectRoot, 'raw/group'), path.join(ProjectRoot, 'raw/scenerio'));
+        shell.mkdir('-p', path.join(ProjectRoot, 'build/group'), path.join(ProjectRoot, 'build/scenerio'));
         document.getElementById('starting_status').className = '';
         document.getElementById('offline_status').className = 'my-hide';
         startServer().then((msg) => {
