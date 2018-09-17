@@ -6,7 +6,6 @@
   "scripts": {
     "start": "electron .",
     "package": "electron-packager ./ myapp --out ./OutApp --version 2.0.0 --overwrite --icon=./ico.ico"
-  
   },
   "repository": {
     "type": "git",
