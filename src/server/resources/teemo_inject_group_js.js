@@ -17,11 +17,7 @@ function teemoCreateGroupToolbar() {
   <div class="teemo teemo-steps-container"  >
         group: 
         <select id="teemo-group" class="teemo teemo-group">
-            
-            <option value ="volvo">登录小红十</option>
-            <option value ="saab">登录小红十登录小红十</option>
-            <option value="opel">登录小红十登录小红十登录小红十</option>
-            <option value="audi">登录小红十登录小红十登录小红十登录小红十</option>
+        
         </select>
   <div>
   <div class="teemo teemo-seperator-line"  ></div>
@@ -32,8 +28,14 @@ function teemoCreateGroupToolbar() {
   <div class="teemo teemo-seperator-line"  ></div>
   <div id="teemo-injectedBox" class="teemo" >
 
-
-
+  </div>
+  <div class="teemo teemo-toolbar">
+    <button class="teemo teemo-tool-wait" onclick=addWait()>Wait</button>
+    <button class="teemo teemo-tool-assert">Assert</button>
+    <div class="teemo teemo-warning">
+        <input onchange="setOriginNodeAmount(event)" type="text" style="width: 50px;" />
+        warning(Set First): you should set the original amount of body's direct child nodes         
+    </div>
   </div>
 </div>
 `;
@@ -65,6 +67,10 @@ function teemoCreateGroupToolbar() {
 
     document.getElementById("teemo-group-name").addEventListener('change', function(e) {
         teemoScenerioData.scenerioName = e.target.value;
+    })
+
+    document.getElementById("teemo-group").addEventListener('change', function(e) {
+        teemoScenerioData.before = e.target.value;
     })
 
     document.addEventListener('mousemove', function(e) {
@@ -149,6 +155,9 @@ function teemoStart() {
         document.getElementById('teemo-waiting-finish').className = "teemo teemo-hide" ;
     }, 1000)
     teemoCreateGroupToolbar();
+    document.body.childNodes.forEach(node => {
+        if (node.nodeName == "DIV") appendedAmount++;
+    })
     listGroup();
     rebuildStepCards();
 }

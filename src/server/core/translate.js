@@ -12,14 +12,14 @@ module.exports = function (data) {
     return ret;
 }
 
-function processBefore(beforeName, beforeQueue) {
+function processBefore(beforeName, beforeStepQueue) {
     if (beforeName) {
-        let realBeforePath = path.join(__dirname, `${beforeName}.json`);
+        let realBeforePath = path.join(ProjectRoot, 'raw/group', beforeName);
         let stat = fs.statSync(realBeforePath);
         if (stat.isFile()) {
             let content = JSON.parse(fs.readFileSync(realBeforePath).toString());
             if (content.before) {
-                processBefore(content.before, beforeQueue);
+                processBefore(content.before, beforeStepQueue);
             }
             content.steps.forEach(step => {
                 stepCode = compile(step);

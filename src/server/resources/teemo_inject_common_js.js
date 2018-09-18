@@ -10,10 +10,13 @@ var teemoScenerioData = {
         }
     ]
 }
+var originAmount = 0;
+var appendedAmount = 0;
 var lastEventTriggerTime = {
-    input: new Date().getTime(),
-    click: new Date().getTime()
+    input: new Date().getTime() + 3000,
+    click: new Date().getTime() + 3000
 };
+var lastClickXpath = '';
 
 function shouldIgnoreThisEvent(last) {
     let now = new Date().getTime();
@@ -35,13 +38,34 @@ function teemoTraceOnclickHandler(element) {
     if (shouldIgnoreThisEvent(lastEventTriggerTime.click)) {
         return;
     }
+    let cxpath = teemoGetElementXPath(element.toElement);
+    let bb = cxpath.split('/');
+    console.log(`cxpath: ${cxpath}`)
+    if (bb[3].indexOf('[') != -1) {
+        let pat = /(.*\[)(\d+)(\].*)/;
+        let mbb = bb[3].match(pat)
+        let idx = parseInt(mbb[2])
+        console.log(`idx: ${idx}`)
+        console.log(`appendedAmount: ${appendedAmount}`)
+        console.log(`originAmount: ${originAmount}`)
+        if (idx >= (appendedAmount)) idx = (idx - parseInt(appendedAmount) + parseInt(originAmount))
+        bb[3] = `${mbb[1]}${idx}${mbb[3]}`
+        console.log(`idx: ${idx}`)
+        cxpath = bb.join('/')
+    }
+    if (cxpath == lastClickXpath) return;
+    lastClickXpath = cxpath;
     lastEventTriggerTime.click = new Date().getTime()
     teemoScenerioData.steps.push({
         action: 'click',
-        xpath: teemoGetElementXPath(element.toElement),
+        xpath: cxpath,
         tips: ''
     })
     rebuildStepCards();
+}
+
+function setOriginNodeAmount(event) {
+    originAmount = parseInt(event.target.value);
 }
 
 function teemoTraceInputHandler(element) {
@@ -62,6 +86,24 @@ function teemoTraceInputHandler(element) {
 function modifyTips(idx, event) {
     teemoScenerioData.steps[idx].tips = event.target.value;
 }
+
+function modifyUrl(idx, event) {
+    teemoScenerioData.steps[idx].url = event.target.value;
+}
+
+function modifyTime(idx, event) {
+    teemoScenerioData.steps[idx].time = event.target.value;
+}
+
+function modifyValue(idx, event) {
+    teemoScenerioData.steps[idx].value = event.target.value;
+}
+
+function modifyXpath(idx, event) {
+    teemoScenerioData.steps[idx].xpath = event.target.value;
+}
+
+  
 
 function teemoPost(uri, data) {
     return new Promise(resolve => {
@@ -92,6 +134,9 @@ function teemoInjectListenerInEveryNode(nextRoots) {
                 currentNode.addEventListener('change', teemoTraceInputHandler, true);
             }
         }
+        if (currentNode.nodeName.toUpperCase() == "TEXTAREA") {
+            currentNode.addEventListener('change', teemoTraceInputHandler, true);
+        }
     })
 }
 
@@ -106,6 +151,14 @@ function teemoRemoveStep(idx) {
     rebuildStepCards()
 }
 
+function teemoUpStep(idx) {
+    if (idx == 0) return;
+    let step = teemoScenerioData.steps[idx - 1];
+    teemoScenerioData.steps[idx - 1] = teemoScenerioData.steps[idx];
+    teemoScenerioData.steps[idx] = step;
+    rebuildStepCards()
+}
+
 function rebuildStepCards() {
     let container = document.getElementById('teemo-injectedBox');
     container.innerHTML = '';
@@ -115,28 +168,41 @@ function rebuildStepCards() {
         stepCard.className = "teemo teemo-one-step-container";
         if (step.action == 'click') {
             stepCard.innerHTML = `
-            <div id='stepCard_${idx}' class=" teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})"    >X</div>
+            <div id='removeStepCard_${idx}' class=" teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})"    >X</div>
+            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
             <div class=" teemo " > 
                 <div   class=" teemo " >action: ${step.action}</div><br/>
-                <span class=" teemo " >xpath:</span><input class="teemo teemo-step-card-value" type="text" value="${step.xpath}"  disabled=true   /><br/><br/>
+                <span class=" teemo " >xpath:</span><input onchange='modifyXpath(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.xpath}"     /><br/><br/>
                 <span class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'  class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
             </div>
         `
         } else if(step.action == 'input') {
             stepCard.innerHTML = `
-            <div id='stepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})"  >X</div>
+            <div id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})"  >X</div>
+            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
             <div  class=" teemo "  > 
                 <div  class=" teemo "  >action: ${step.action}</div><br/>
-                <span  class=" teemo "  >value:</span><input   class="teemo teemo-step-card-value" type="text" value="${step.value}"  disabled=true /><br/><br/>
+                <span  class=" teemo "  >value:</span><input onchange='modifyValue(${idx}, event)'  class="teemo teemo-step-card-value" type="text" value="${step.value}"   /><br/><br/>
                 <span  class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
             </div>
         `
         } else if (step.action == 'go') {
             stepCard.innerHTML = `
-            <div  id='stepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
+            <div  id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
+            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
             <div  class=" teemo "  > 
                 <div  class=" teemo "  >action: ${step.action}</div><br/>
-                <span  class=" teemo "  >url:  </span><input   class="teemo teemo-step-card-value" type="text" value="${step.url}"  disabled=true /><br/><br/>
+                <span  class=" teemo "  >url:  </span><input onchange='modifyUrl(${idx}, event)'  class="teemo teemo-step-card-value" type="text" value="${step.url}"   /><br/><br/>
+                <span   class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
+            </div>
+        `
+        } else if (step.action == "sleep") {
+            stepCard.innerHTML = `
+            <div  id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
+            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
+            <div  class=" teemo "  > 
+                <div  class=" teemo "  >action: ${step.action}</div><br/>
+                <span  class=" teemo "  >time/s:  </span><input  onchange='modifyTime(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.time}"   /><br/><br/>
                 <span   class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
             </div>
         `
@@ -144,6 +210,16 @@ function rebuildStepCards() {
         
         container.appendChild(stepCard);
     }
+}
+
+
+function addWait() {
+    teemoScenerioData.steps.push({
+        action: 'sleep',
+        time: 1,
+        tips: ''
+    })
+    rebuildStepCards();
 }
 
 

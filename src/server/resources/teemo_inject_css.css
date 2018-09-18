@@ -21,6 +21,26 @@
     width: 200px;
 }
 
+.teemo-toolbar {
+    position: absolute;
+    top: 0px;
+    left: -57px;
+    height: 57px;;
+    width: 56px;
+}
+
+.teemo-tool-wait {
+    height: 57px;
+    width: 56px;
+    border-right-color: white;
+    color: white;
+}
+.teemo-tool-assert {
+    height: 57px;
+    width: 56px;
+    border-right-color: white;
+    color: white;
+}
 
 #teemo-dragBoxBar {
     justify-content: space-between;
@@ -209,6 +229,34 @@
 }
 
 .teemo-one-container-close:hover {
+    background-color: #5a1717
+}
+
+.teemo-warning {
+    width: 56px;
+    height: 250px;
+    background-color: #b38a005c;
+    font-size: 1px;
+    color: red;
+    padding-top: 10px;
+}
+
+.teemo-one-container-up {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    font-size: 12px;
+    border: 1px solid;
+    letter-spacing: 0px;
+    border-radius: 20px;
+    width: 18px;
+    height: 18px;
+    background-color: #efdada;
+    color: red;
+    text-align: center;
+}
+
+.teemo-one-container-up:hover {
     background-color: #5a1717
 }
 
