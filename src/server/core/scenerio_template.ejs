@@ -8,12 +8,32 @@ describe('<%= scenerioName %>', function () {
 
     let Driver = null;
 
-    before(async function () {
-        let option = new Options();
-        option.setChromeBinaryPath('C:\\Users\\1\\AppData\\Roaming\\360se6\\Application\\360se.exe');
-        Driver = new Builder().forBrowser('chrome')
-        .setChromeOptions(option)
-        .usingServer('http://localhost:4444/wd/hub').build();
+    before(async function () {        
+        switch(env.browser) {
+            case 'Chrome': {
+                Driver = new Builder().forBrowser('chrome'); break;
+            }
+            case 'Firefox': {
+                Driver = new Builder().forBrowser('firefox'); break;
+            }
+            case '360': {
+                Driver = new Builder().forBrowser('chrome');
+                let option = new Options();
+                option.setChromeBinaryPath(b360Location);
+                Driver.setChromeOptions(option);
+                break;
+            }
+            case 'Edge': {
+                Driver = new Builder().forBrowser('MicrosoftEdge'); break;
+            }
+            case 'IE': {
+                Driver = new Builder().forBrowser('internet explorer'); break;
+            }
+            case 'Safari': {
+                Driver = new Builder().forBrowser('safari'); break;
+            }
+        }
+        Driver = Driver.usingServer('http://localhost:4444/wd/hub').build();
         await Driver.manage().window().maximize();
 
         <% before.forEach(function(code){ %>

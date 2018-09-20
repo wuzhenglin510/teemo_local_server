@@ -43,18 +43,15 @@ function prepareTestEnv() {
         shell.cd(path.join(ProjectRoot, 'build'));
         shell.cp(path.join(__dirname, '../../server/core/test_env/run.js'), path.join(ProjectRoot, 'build'));
         shell.cp('-n', path.join(__dirname, '../../server/core/test_env/customGlobalFunc.js'), path.join(ProjectRoot, 'build'))
-        shell.cp(path.join(__dirname, '../../server/core/test_env/geckodriver.exe'), path.join(ProjectRoot, 'build'))
         shell.cp(path.join(__dirname, '../../server/core/test_env/selenium-server-standalone-3.9.1.jar'), path.join(ProjectRoot, 'build'))
         if (os.platform().indexOf("darwin") != -1) {
-            shell.cp(path.join(__dirname, '../../server/core/test_env/mac/chromedriver'), path.join(ProjectRoot, 'build'))
-            // let npmShell = child_process.spawnSync('/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal', [], {
-            //     input: `cd ${path.join(ProjectRoot, 'build')}`
-            // });
+            child_process.exec(`osascript -e 'tell application "Terminal" to do script "cd ${path.join(ProjectRoot, 'build')} && npm install selenium-webdriver"'`)
+            child_process.exec(`osascript -e 'tell application "Terminal" to do script "cd ${path.join(ProjectRoot, 'build')} && java -jar selenium-server-standalone-3.9.1.jar"'`)
         } else if(os.platform().indexOf("win") != -1) {
-            shell.cp(path.join(__dirname, '../../server/core/test_env/win/chromedriver.exe'), path.join(ProjectRoot, 'build'))
+            shell.cp(path.join(__dirname, '../../server/core/test_env/win/360_location.json'), path.join(ProjectRoot, 'build'));
             child_process.exec(`start cmd.exe @cmd /k "cd ${path.join(ProjectRoot, 'build')} & npm install selenium-webdriver"`)
+            child_process.exec(`start cmd.exe @cmd /k "cd ${path.join(ProjectRoot, 'build')} & java -jar selenium-server-standalone-3.9.1.jar"`)
         }
-        child_process.exec(`start cmd.exe @cmd /k "cd ${path.join(ProjectRoot, 'build')} & java -jar selenium-server-standalone-3.9.1.jar"`)
 }
 
 

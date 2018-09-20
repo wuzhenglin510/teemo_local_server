@@ -11,7 +11,10 @@ describe('test', function() {
 
 
 function testBefore() {
-    let env = JSON.parse(fs.readFileSync(path.join(__dirname, "env")).toString());
+    global.env = JSON.parse(fs.readFileSync(path.join(__dirname, "env")).toString());
+    if (env.browser == "360") {
+        global.b360Location = JSON.parse(fs.readFileSync(path.join(__dirname, "360_location.json")).toString()).location;
+    }
     global.TestCases = [];
     findTestCase(path.join(env.root, env.type));
 }
