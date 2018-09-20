@@ -26,6 +26,8 @@
     top: 0px;
     left: -57px;
     height: 57px;;
+    font-size: 10px !important;
+    font-weight: 100!important;
     width: 56px;
 }
 
@@ -34,12 +36,40 @@
     width: 56px;
     border-right-color: white;
     color: white;
+    background-color: #81c2d6;
+    font-size: 10px !important;
+    font-weight: 100!important;
+    border: ''!important;
 }
 .teemo-tool-assert {
     height: 57px;
     width: 56px;
     border-right-color: white;
     color: white;
+    background-color: #8192d6;
+    font-size: 10px !important;
+    font-weight: 100!important;
+    border: ''!important;
+}
+.teemo-tool-pick {
+    height: 57px;
+    width: 56px;
+    border-right-color: white;
+    color: white;
+    background-color: #d9b3e6;
+    font-size: 10px !important;
+    font-weight: 100!important;
+    border: ''!important;
+}
+.teemo-tool-exp {
+    height: 57px;
+    width: 56px;
+    border-right-color: white;
+    color: white;
+    background-color: #dcf7a1;
+    font-size: 10px !important;
+    font-weight: 100 !important;
+    border: ''!important;
 }
 
 #teemo-dragBoxBar {
@@ -69,7 +99,7 @@
 
 #teemo-injectedBox {
     padding-top: 10px;
-    min-height: 160px;
+    min-height: 260px;
     max-height: 500px;
     align-items: center;
     justify-content: center;
@@ -79,6 +109,7 @@
 }
 
 .teemo-box {
+    font-size: 13px !important;
     border-radius: 5px;
     box-shadow: 0 20px 30px rgba(0, 0, 0, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -205,7 +236,7 @@
     border-radius: 10px;
     margin-bottom: 10px;
     position: relative;
-    font-size: 10px;
+    font-size: 10px !important;
     letter-spacing: normal;
     color: black;
     text-align: left;
@@ -275,3 +306,86 @@
     border: 0px !important;
     font-size: 1px !important;
 }
+
+
+.teemo-pick {
+    min-width: 300px;
+    max-width: 600px;
+    min-height: 100px;
+    max-height: 500px;
+    position: fixed;
+    background-color: #0022ff52;
+    border-radius: 300px;
+    padding: 30px 20px 30px 80px;
+}
+
+.teemo-pick-confirm {
+    position: absolute;
+    bottom: -20px;
+    left: 40%;
+    border-radius: 10px;
+    background-color: #9fffbc69;
+    color: cornflowerblue;
+}
+
+.teemo-pick-card {
+    background-color: #0000003d;
+    color: white;
+    border-radius: 10px;
+    width: 96%;
+}
+
+.teemo-pick-radio {
+    display: inline-block;
+    padding-right: 10px;
+    font-size: 9px;
+    line-height: 20px;
+    cursor: pointer;
+  }
+  .teemo-pick-radio:hover .teemo-pick-inner {
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+    opacity: 0.5;
+  }
+  .teemo-pick-radio input {
+    height: 1px;
+    width: 1px;
+    opacity: 0;
+  }
+  .teemo-pick-radio input:checked + .teemo-pick-outer .teemo-pick-inner {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+  .teemo-pick-radio input:checked + .teemo-pick-outer {
+    border: 2px solid #f08b3b;
+  }
+  .teemo-pick-radio input:focus + .teemo-pick-outer .teemo-pick-inner {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+    background-color: #e67012;
+  }
+  .teemo-pick-radio .teemo-pick-outer {
+    height: 10px;
+    width: 10px;
+    display: block;
+    float: left;
+    margin: 5px 4px 5px 4px;
+    border: 2px solid #0c70b4;
+    border-radius: 50%;
+    background-color: #fff;
+  }
+  .teemo-pick-radio .teemo-pick-inner {
+    transition: all 0.25s ease-in-out;
+    height: 8px;
+    width: 8px;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    display: block;
+    margin: 1px;
+    border-radius: 50%;
+    background-color: #f08b3b;
+    opacity: 0;
+  }
+  

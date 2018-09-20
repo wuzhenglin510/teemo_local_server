@@ -41,7 +41,8 @@ function prepareTestEnv() {
     shell.mkdir('-p', path.join(ProjectRoot, 'raw/group'), path.join(ProjectRoot, 'raw/scenerio'));
         shell.mkdir('-p', path.join(ProjectRoot, 'build/group'), path.join(ProjectRoot, 'build/scenerio'));
         shell.cd(path.join(ProjectRoot, 'build'));
-        shell.cp(path.join(__dirname, '../../server/core/test_env/run.js'), path.join(ProjectRoot, 'build'))
+        shell.cp(path.join(__dirname, '../../server/core/test_env/run.js'), path.join(ProjectRoot, 'build'));
+        shell.cp('-n', path.join(__dirname, '../../server/core/test_env/customGlobalFunc.js'), path.join(ProjectRoot, 'build'))
         shell.cp(path.join(__dirname, '../../server/core/test_env/geckodriver.exe'), path.join(ProjectRoot, 'build'))
         shell.cp(path.join(__dirname, '../../server/core/test_env/selenium-server-standalone-3.9.1.jar'), path.join(ProjectRoot, 'build'))
         if (os.platform().indexOf("darwin") != -1) {

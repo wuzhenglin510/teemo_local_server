@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const {Builder} = require('selenium-webdriver');
+require("./customGlobalFunc.js")
 
 describe('test', function() {
     testBefore();

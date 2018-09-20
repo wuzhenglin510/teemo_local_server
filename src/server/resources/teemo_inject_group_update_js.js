@@ -32,11 +32,18 @@ function teemoCreateGroupToolbar() {
   </div>
 
   <div class="teemo teemo-toolbar">
-    <button class="teemo teemo-tool-wait" onclick=addWait()>Wait</button>
-    <button class="teemo teemo-tool-assert">Assert</button>
+    <button class="teemo teemo-tool-wait" onclick="addWait()">Wait</button>
+    <button class="teemo teemo-tool-assert" onclick="addAssert()">Assert</button>
+    <button class="teemo teemo-tool-pick" onclick="startPickProcess()">Pick</button>
+    <button class="teemo teemo-tool-exp" onclick="addExpression()">Exp</button>
     <div class="teemo teemo-warning">
         <input onchange="setOriginNodeAmount(event)" type="text" style="width: 50px;" />
-        warning(Set First): you should set the original amount of body's direct child nodes         
+        warning : you should set the original amount of body's direct child nodes at first
+    </div>
+    <div id="teemo-pick" class="teemo-pick" style="display:none">
+        <div id="teemo-pick-card" class="card teemo-pick-card">
+        </div>
+        <button onclick="confirmPick()" class="teemo-pick-confirm">confirm</button>
     </div>
   </div>
 </div>
@@ -138,7 +145,7 @@ function updateGroup() {
 }
 
 function listGroup() {
-    teemoPost('http://localhost:6385/group.list', teemoScenerioData).then(result => {
+    return teemoPost('http://localhost:6385/group.list', teemoScenerioData).then(result => {
         let html = '<option value=null selected="selected" class="teemo">without before group</option>';
         for(let group of result.groups) {
             html = html.concat(`<option  class="teemo" value="${group}">${group}</option>`)
@@ -160,21 +167,21 @@ function teemoStart() {
     document.body.childNodes.forEach(node => {
         if (node.nodeName == "DIV") appendedAmount++;
     })
-    listGroup();
-    let scenerioName = document.getElementById("teemoUpdateEnv").innerText;
-    teemoPost('http://localhost:6385/group.get', {scenerioName: scenerioName}).then(result => {
-        teemoScenerioData = result;
-        document.getElementById("teemo-group-name").value = result.scenerioName;
-        let options = document.getElementById('teemo-group').childNodes;
-        for(let option of options) {
-            if (option.value == result.before) {
-                option.setAttribute("selected", "selected")
+    listGroup().then(() => {
+        let scenerioName = document.getElementById("teemoUpdateEnv").innerText;
+        teemoPost('http://localhost:6385/group.get', {scenerioName: scenerioName}).then(result => {
+            teemoScenerioData = result;
+            document.getElementById("teemo-group-name").value = result.scenerioName;
+            let options = document.getElementById('teemo-group').childNodes;
+            for(let option of options) {
+                if (option.value == result.before) {
+                    option.setAttribute("selected", "selected")
+                }
             }
-        }
-        console.log(teemoScenerioData)
-        rebuildStepCards();
-    })
-    
+            console.log(teemoScenerioData)
+            rebuildStepCards();
+        })
+    });
 }
 
 while(true) {

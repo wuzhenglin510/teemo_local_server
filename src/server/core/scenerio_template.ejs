@@ -14,7 +14,6 @@ describe('<%= scenerioName %>', function () {
     it('<%= scenerioName %>', async function () {
         <% steps.forEach(function(code){ %>
             <%- code %>
-            await Driver.sleep(300);
         <% }); %>
     });
 

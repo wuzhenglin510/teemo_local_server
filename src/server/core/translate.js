@@ -45,6 +45,8 @@ function compile(step) {
         case 'input': return compileInput(step);
         case 'sleep': return compileSleep(step);
         case 'assert': return compileAssert(step);
+        case 'pick': return compilePick(step);
+        case 'exp': return compileExp(step);
         default: throw new Error(`unrecognized action: ${step.action}`);
     }
 
@@ -59,36 +61,33 @@ function compileClick(step) {
 }
 
 function compileInput(step) {
-    return `await Driver.switchTo().activeElement().sendKeys('${step.value}');`;
+    if (step.valType == "code") {
+        return `await Driver.switchTo().activeElement().sendKeys(\`\$\{${step.value}\}\`);`;
+    } else {
+        return `await Driver.switchTo().activeElement().sendKeys('${step.value}');`;
+    }
 }
 
 function compileSleep(step) {
     return `await Driver.sleep(${step.time * 1000});`
 }
 
-function compileAssert(step) {
-    let tp1 = `t_param_${Math.floor(Math.random() * 1000000)}`;
-    let tp2 = `t_param_${Math.floor(Math.random() * 1000000)}`;
-    if (step.type = "elementToValue") {
-        return 
-`
-let ${tp1} = ${_compileExtractValue(step.targets[0])};
-let ${tp2} = ${step.expectedValue};
-assert( ${tp1} ${step.condition} ${tp2}, \`${step.message}(\$\{${tp1}\} ${step.condition} \$\{${tp2})\}\`);             
-`;
-    } else {
-        return 
-`
-let ${tp1} = ${_compileExtractValue(step.targets[0])};
-let ${tp2} = ${_compileExtractValue(step.targets[1])};
-assert( ${tp1} ${step.condition} ${tp2}, \`${step.message}(\$\{${tp1}\} ${step.condition} \$\{${tp2})\}\`);
-`
-    }
+
+function compilePick(step) {
+    return `let ${step.variable} = ${_compileExtractValue(step)}`;
 }
 
-function _compileExtractValue(tip) {
-    if (tip.isAttribute) {
-        return `await Driver.findElement(By.xpath('${step.targets[0].xpath}')).getAttribute('${tip.attributeName}');`;
+function compileExp(step) {
+    return `let ${step.variable} = ${step.code}`;
+}
+
+function compileAssert(step) {
+    return `assert( ${step.code})`;
+}
+
+function _compileExtractValue(step) {
+    if (step.attribute != "innerText") {
+        return `await Driver.findElement(By.xpath('${step.xpath}')).getAttribute('${tip.attributeName}');`;
     }
-    return `await Driver.findElement(By.xpath('${step.targets[0].xpath}')).getText();`
+    return `await Driver.findElement(By.xpath('${step.xpath}')).getText();`
 }

@@ -30,11 +30,18 @@ function teemoCreateGroupToolbar() {
 
   </div>
   <div class="teemo teemo-toolbar">
-    <button class="teemo teemo-tool-wait" onclick=addWait()>Wait</button>
-    <button class="teemo teemo-tool-assert">Assert</button>
+    <button class="teemo teemo-tool-wait" onclick="addWait()">Wait</button>
+    <button class="teemo teemo-tool-assert" onclick="addAssert()">Assert</button>
+    <button class="teemo teemo-tool-pick" onclick="startPickProcess()">Pick</button>
+    <button class="teemo teemo-tool-exp" onclick="addExpression()">Exp</button>
     <div class="teemo teemo-warning">
         <input onchange="setOriginNodeAmount(event)" type="text" style="width: 50px;" />
-        warning(Set First): you should set the original amount of body's direct child nodes         
+        warning : you should set the original amount of body's direct child nodes at first
+    </div>
+    <div id="teemo-pick" class="teemo-pick" style="display:none">
+        <div id="teemo-pick-card" class="card teemo-pick-card">
+        </div>
+        <button onclick="confirmPick()" class="teemo-pick-confirm">confirm</button>
     </div>
   </div>
 </div>
