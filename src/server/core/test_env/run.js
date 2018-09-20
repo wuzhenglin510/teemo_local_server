@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const {Builder} = require('selenium-webdriver');
 require("./customGlobalFunc.js")
 
 describe('test', function() {
@@ -15,8 +14,6 @@ function testBefore() {
     let env = JSON.parse(fs.readFileSync(path.join(__dirname, "env")).toString());
     global.TestCases = [];
     findTestCase(path.join(env.root, env.type));
-    global.Driver = new Builder().forBrowser('chrome').setChromeOptions("").usingServer('http://localhost:4444/wd/hub').build();
-    Driver.manage().window().maximize();
 }
 
 function findTestCase(root) {

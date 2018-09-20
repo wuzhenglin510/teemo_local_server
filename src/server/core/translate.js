@@ -24,6 +24,7 @@ function processBefore(beforeName, beforeStepQueue) {
             content.steps.forEach(step => {
                 stepCode = compile(step);
                 beforeStepQueue.push(stepCode)
+                beforeStepQueue.push(`// ${step.tips}`)
             })
         } else {
             throw new Error(`${realBeforePath} not exist`)
@@ -34,7 +35,8 @@ function processBefore(beforeName, beforeStepQueue) {
 function processSteps(steps, stepQueue) {
     steps.forEach(step => {
         stepCode = compile(step);
-        stepQueue.push(stepCode)
+        stepQueue.push(stepCode);
+        stepQueue.push(`// ${step.tips}`)
     })
 }
 

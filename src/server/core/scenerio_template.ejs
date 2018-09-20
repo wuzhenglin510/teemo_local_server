@@ -1,11 +1,16 @@
-const {By, until, Key} = require('selenium-webdriver');
+const {By, until, Key, Builder} = require('selenium-webdriver');
 const assert = require('assert');
 
 describe('<%= scenerioName %>', function () {
 
     this.timeout(3600000);
 
+    let Driver = null;
+
     before(async function () {
+        Driver = new Builder().forBrowser('chrome').setChromeOptions("").usingServer('http://localhost:4444/wd/hub').build();
+        await Driver.manage().window().maximize();
+
         <% before.forEach(function(code){ %>
             <%- code %>
         <% }); %>
@@ -16,5 +21,9 @@ describe('<%= scenerioName %>', function () {
             <%- code %>
         <% }); %>
     });
+
+    after(async function() {
+    	await Driver.close();
+  	});
 
 })
