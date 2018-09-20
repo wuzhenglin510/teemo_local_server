@@ -1,4 +1,5 @@
 const {By, until, Key, Builder} = require('selenium-webdriver');
+const {Options} = require('selenium-webdriver/chrome');
 const assert = require('assert');
 
 describe('<%= scenerioName %>', function () {
@@ -8,7 +9,11 @@ describe('<%= scenerioName %>', function () {
     let Driver = null;
 
     before(async function () {
-        Driver = new Builder().forBrowser('chrome').setChromeOptions("").usingServer('http://localhost:4444/wd/hub').build();
+        let option = new Options();
+        option.setChromeBinaryPath('C:\\Users\\1\\AppData\\Roaming\\360se6\\Application\\360se.exe');
+        Driver = new Builder().forBrowser('chrome')
+        .setChromeOptions(option)
+        .usingServer('http://localhost:4444/wd/hub').build();
         await Driver.manage().window().maximize();
 
         <% before.forEach(function(code){ %>
