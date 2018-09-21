@@ -14,13 +14,15 @@ var originAmount = 0;
 var appendedAmount = 0;
 var lastEventTriggerTime = {
     input: new Date().getTime() + 3000,
-    click: new Date().getTime() + 3000
+    click: new Date().getTime() + 3000,
+    keydown: new Date().getTime()
 };
 var lastClickXpath = '';
 var teemoInPickProcess = false;
 var teemoinPickingStart = false;
 var currentPickXpath = '';
 var currentPickAttribute = "";
+var lastAction = "";
 
 function shouldIgnoreThisEvent(last) {
     let now = new Date().getTime();
@@ -86,6 +88,7 @@ function confirmPick() {
         variable: `p_${Math.floor(Math.random() * 100000)}`,
         tips: ''
     })
+    lastAction = "pick";
     document.getElementById("teemo-pick").style = `display: none;`;
     rebuildStepCards();
 }
@@ -124,6 +127,7 @@ function teemoTraceOnclickHandler(event) {
             xpath: cxpath,
             tips: ''
         })
+        lastAction = "click";
         rebuildStepCards();
     }
     
@@ -143,12 +147,25 @@ function teemoTraceInputHandler(element) {
         return;
     }
     lastEventTriggerTime.input = new Date().getTime()
-    teemoScenerioData.steps.push({
-        action: 'input',
-        valType: 'text',
-        value: element.target.value,
-        tips: ''
-    })
+
+    if (lastAction == "keydown" && (new Date().getTime() - lastEventTriggerTime.keydown) < 100) {
+        let trs = teemoScenerioData.steps[teemoScenerioData.steps.length -1];
+        teemoScenerioData.steps[teemoScenerioData.steps.length -1] = {
+            action: 'input',
+            valType: 'text',
+            value: element.target.value,
+            tips: ''
+        }
+        teemoScenerioData.steps.push(trs);
+    } else {
+        teemoScenerioData.steps.push({
+            action: 'input',
+            valType: 'text',
+            value: element.target.value,
+            tips: ''
+        })
+    }
+    lastAction = "input";
     rebuildStepCards();
 }
 
@@ -332,6 +349,16 @@ function rebuildStepCards() {
                 <span   class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
             </div>
         `
+        } else if (step.action == "keydown") {
+            stepCard.innerHTML = `
+            <div  id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
+            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
+            <div  class=" teemo "  > 
+                <div  class=" teemo "  >action: ${step.action}</div><br/>
+                <span  class=" teemo "  >code:  </span><input  class="teemo teemo-step-card-value" type="text" value="${step.key}"  disabled="disabled" /><br/><br/>
+                <span   class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
+            </div>
+        `
         }
         
         container.appendChild(stepCard);
@@ -345,6 +372,7 @@ function addWait() {
         time: 1,
         tips: ''
     })
+    lastAction = "wait";
     rebuildStepCards();
 }
 
@@ -355,6 +383,7 @@ function addExpression() {
         variable: `p_${Math.floor(Math.random() * 100000)}`,
         tips: ''
     })
+    lastAction = "exp";
     rebuildStepCards();
 }
 
@@ -364,9 +393,32 @@ function addAssert() {
         code: '',
         tips: ''
     })
+    lastAction = "assert";
     rebuildStepCards();
 }
 
+document.addEventListener("keydown", function(event) {
+    if(event.code == "Enter") {
+        teemoScenerioData.steps.push({
+            action: "keydown",
+            key: 'Enter',
+            tips: 'tap key Enter'
+        });
+        lastEventTriggerTime.keydown = new Date().getTime();
+        lastAction = "keydown";
+        rebuildStepCards();
+    } else if (event.code == "Tab") {
+        teemoScenerioData.steps.push({
+            action: "keydown",
+            key: 'Tab',
+            tips: 'tap key Tab'
+        });
+        lastEventTriggerTime.keydown = new Date().getTime();
+        lastAction = "keydown";
+        rebuildStepCards();
+    }
+    
+})
 
 
 var teemoObserveRootNode = document.body;

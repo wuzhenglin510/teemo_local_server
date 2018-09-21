@@ -16,9 +16,9 @@ module.exports = async ({body, query}) => {
     if (os.platform().indexOf("darwin") != -1) {
         shell.rm(`${path.join(ProjectRoot, 'build', 'chromedriver')}`)
         shell.rm(`${path.join(ProjectRoot, 'build', 'geckodriver')}`)
-        if (browser == "Chrome") {
+        if (body.browser == "Chrome") {
             shell.cp(path.join(__dirname, '../../core/test_env/mac/chromedriver'), path.join(ProjectRoot, 'build', 'chromedriver'));
-        } else if (browser == "Firefox") {
+        } else if (body.browser == "Firefox") {
             shell.cp(path.join(__dirname, '../../core/test_env/mac/geckodriver'), path.join(ProjectRoot, 'build', 'geckodriver')); 
         }
     } else if(os.platform().indexOf("win") != -1) {
@@ -26,7 +26,7 @@ module.exports = async ({body, query}) => {
         shell.rm(`${path.join(ProjectRoot, 'build', 'geckodriver.exe')}`)
         shell.rm(`${path.join(ProjectRoot, 'build', 'IEDriverServer.exe')}`)
         shell.rm(`${path.join(ProjectRoot, 'build', 'MicrosoftWebDriver.exe')}`)
-        switch(browser) {
+        switch(body.browser) {
             case 'Chrome': shell.cp(path.join(__dirname, '../../core/test_env/win/chromedriver.exe'), path.join(ProjectRoot, 'build', 'chromedriver.exe')); break;
             case 'Firefox': shell.cp(path.join(__dirname, '../../core/test_env/win/geckodriver.exe'), path.join(ProjectRoot, 'build', 'geckodriver.exe')); break;
             case '360': shell.cp(path.join(__dirname, '../../core/test_env/win/360.exe'), path.join(ProjectRoot, 'build', 'chromedriver.exe')); break;

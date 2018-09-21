@@ -9,6 +9,7 @@ const child_process = require("child_process")
 let status = false;
 let directory = '';
 
+
 function toStart() {
     if (status == true) {
         alert('already started');
@@ -41,14 +42,14 @@ function prepareTestEnv() {
     shell.mkdir('-p', path.join(ProjectRoot, 'raw/group'), path.join(ProjectRoot, 'raw/scenerio'));
         shell.mkdir('-p', path.join(ProjectRoot, 'build/group'), path.join(ProjectRoot, 'build/scenerio'));
         shell.cd(path.join(ProjectRoot, 'build'));
-        shell.cp(path.join(__dirname, '../../server/core/test_env/run.js'), path.join(ProjectRoot, 'build'));
+        shell.cp('-n', path.join(__dirname, '../../server/core/test_env/run.js'), path.join(ProjectRoot, 'build'));
         shell.cp('-n', path.join(__dirname, '../../server/core/test_env/customGlobalFunc.js'), path.join(ProjectRoot, 'build'))
         shell.cp(path.join(__dirname, '../../server/core/test_env/selenium-server-standalone-3.9.1.jar'), path.join(ProjectRoot, 'build'))
         if (os.platform().indexOf("darwin") != -1) {
             child_process.exec(`osascript -e 'tell application "Terminal" to do script "cd ${path.join(ProjectRoot, 'build')} && npm install selenium-webdriver"'`)
             child_process.exec(`osascript -e 'tell application "Terminal" to do script "cd ${path.join(ProjectRoot, 'build')} && java -jar selenium-server-standalone-3.9.1.jar"'`)
         } else if(os.platform().indexOf("win") != -1) {
-            shell.cp(path.join(__dirname, '../../server/core/test_env/win/360_location.json'), path.join(ProjectRoot, 'build'));
+            shell.cp('-n', path.join(__dirname, '../../server/core/test_env/win/360_location.json'), path.join(ProjectRoot, 'build'));
             child_process.exec(`start cmd.exe @cmd /k "cd ${path.join(ProjectRoot, 'build')} & npm install selenium-webdriver"`)
             child_process.exec(`start cmd.exe @cmd /k "cd ${path.join(ProjectRoot, 'build')} & java -jar selenium-server-standalone-3.9.1.jar"`)
         }

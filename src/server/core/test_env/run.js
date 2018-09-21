@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
+const child_process = require('child_process');
 require("./customGlobalFunc.js")
 
 describe('test', function() {
@@ -7,6 +9,52 @@ describe('test', function() {
     TestCases.forEach(caseFile => {
         require(caseFile);
     })
+
+    after(function () {
+        console.log('test case run finish, start clean process');
+        switch(env.browser) {
+            case 'Chrome': {
+                if (os.platform().indexOf("win") != -1) {
+                    child_process.exec(`taskkill /f /t /im chromedriver.exe`)
+                } else if (os.platform().indexOf("darwin") != -1) {
+
+                }
+            }
+            case 'Firefox': {
+                if (os.platform().indexOf("win") != -1) {
+                    child_process.exec(`taskkill /f /t /im geckodriver.exe`)
+                } else if (os.platform().indexOf("darwin") != -1) {
+
+                }
+            }
+            case '360': {
+                if (os.platform().indexOf("win") != -1) {
+                    child_process.exec(`taskkill /f /t /im chromedriver.exe`)
+                } else if (os.platform().indexOf("darwin") != -1) {
+
+                }
+            }
+            case 'Edge': {
+                if (os.platform().indexOf("win") != -1) {
+                    child_process.exec(`taskkill /f /t /im MicrosoftWebDriver.exe`)
+                } else if (os.platform().indexOf("darwin") != -1) {
+
+                }
+            }
+            case 'IE': {
+                if (os.platform().indexOf("win") != -1) {
+                    child_process.exec(`taskkill /f /t /im IEDriverServer.exe`)
+                } else if (os.platform().indexOf("darwin") != -1) {
+
+                }
+            }
+            case 'Safari': {
+                
+            }
+        }
+        console.log('clean process finished');
+    })
+    
 });
 
 

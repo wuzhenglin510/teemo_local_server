@@ -6,6 +6,7 @@ const child_process = require("child_process")
 const os = require('os')
 
 
+
 module.exports = async ({body, query}) => {
     //初始化环境
     fs.writeFileSync(path.join(ProjectRoot, "build/env"), JSON.stringify({

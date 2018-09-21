@@ -49,6 +49,7 @@ function compile(step) {
         case 'assert': return compileAssert(step);
         case 'pick': return compilePick(step);
         case 'exp': return compileExp(step);
+        case 'keydown': return compileKeydown(step);
         default: throw new Error(`unrecognized action: ${step.action}`);
     }
 
@@ -60,6 +61,14 @@ function compileGo(step) {
 
 function compileClick(step) {
     return `await Driver.findElement(By.xpath('${step.xpath}')).click();`;
+}
+
+function compileKeydown(step) {
+    if (step.key == "Enter") {
+        return `await Driver.switchTo().activeElement().sendKeys(Key.ENTER);`;
+    } else if (step.key == "Tab") {
+        return `await Driver.switchTo().activeElement().sendKeys(Key.TAB);`;
+    }
 }
 
 function compileInput(step) {
