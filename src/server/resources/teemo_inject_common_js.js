@@ -10,7 +10,6 @@ var teemoScenerioData = {
         }
     ]
 }
-var originAmount = 0;
 var appendedAmount = 0;
 var lastEventTriggerTime = {
     input: new Date().getTime() + 3000,
@@ -49,8 +48,7 @@ function teemoProcessPick(event) {
         let idx = parseInt(mbb[2])
         console.log(`idx: ${idx}`)
         console.log(`appendedAmount: ${appendedAmount}`)
-        console.log(`originAmount: ${originAmount}`)
-        if (idx >= (appendedAmount)) idx = (idx - parseInt(appendedAmount) + parseInt(originAmount) )
+        if (idx >= (appendedAmount)) idx = (idx - 2)
         bb[3] = `${mbb[1]}${idx}${mbb[3]}`
         console.log(`idx: ${idx}`)
         cxpath = bb.join('/');
@@ -113,8 +111,7 @@ function teemoTraceOnclickHandler(event) {
             let idx = parseInt(mbb[2])
             console.log(`idx: ${idx}`)
             console.log(`appendedAmount: ${appendedAmount}`)
-            console.log(`originAmount: ${originAmount}`)
-            if (idx >= (appendedAmount)) idx = (idx - parseInt(appendedAmount) + parseInt(originAmount))
+            if (idx >= (appendedAmount)) idx = (idx - 2)
             bb[3] = `${mbb[1]}${idx}${mbb[3]}`
             console.log(`idx: ${idx}`)
             cxpath = bb.join('/')
@@ -133,9 +130,6 @@ function teemoTraceOnclickHandler(event) {
     
 }
 
-function setOriginNodeAmount(event) {
-    originAmount = parseInt(event.target.value);
-}
 
 function startPickProcess() {
     teemoInPickProcess = true;
