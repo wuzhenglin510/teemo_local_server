@@ -29,7 +29,7 @@ module.exports = async () => {
         //服务端报错，可以监听error事件，打印日志
         server.on("error", err => {
             console.log(err)
-            logger.error()
+            logger.error(err)
             reject(err)
         })
         server.start()

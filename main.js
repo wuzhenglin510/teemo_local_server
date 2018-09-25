@@ -10,7 +10,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({width: 410, height: 300})
   mainWindow.setResizable(false);
   mainWindow.setMenu(null);
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
   mainWindow.webContents.reloadIgnoringCache()
 
 

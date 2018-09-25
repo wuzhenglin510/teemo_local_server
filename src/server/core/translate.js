@@ -60,7 +60,7 @@ function compileGo(step) {
 }
 
 function compileClick(step) {
-    return `await Driver.findElement(By.xpath('${step.xpath}')).click();`;
+    return `await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).click();`;
 }
 
 function compileKeydown(step) {
