@@ -60,7 +60,8 @@ function compileGo(step) {
 }
 
 function compileClick(step) {
-    return `await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).click();`;
+    return `await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).isDisplayed();
+            await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).click();`;
 }
 
 function compileKeydown(step) {
@@ -85,7 +86,7 @@ function compileSleep(step) {
 
 
 function compilePick(step) {
-    return `let ${step.variable} = ${_compileExtractValue(step)}`;
+    return _compileExtractValue(step);
 }
 
 function compileExp(step) {
@@ -98,7 +99,9 @@ function compileAssert(step) {
 
 function _compileExtractValue(step) {
     if (step.attribute != "innerText") {
-        return `await Driver.findElement(By.xpath('${step.xpath}')).getAttribute('${tip.attributeName}');`;
+        return `await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).isDisplayed();
+                let ${step.variable} = await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).getAttribute('${step.attributeName}');`;
     }
-    return `await Driver.findElement(By.xpath('${step.xpath}')).getText();`
+    return `await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).isDisplayed();
+            let ${step.variable} = await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).getText();`
 }

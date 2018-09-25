@@ -418,6 +418,7 @@ document.addEventListener("keydown", function(event) {
 var teemoObserveRootNode = document.body;
 var teemoObserveConfig = {childList: true, subtree: true };
 function teemoObserveEventHandler (mutationsList) {
+    console.log("监听到变化")
     for(let mutation of mutationsList) {
         if (mutation.target.className.indexOf("teemo") == -1) {
             teemoInjectListenerInEveryNode(mutation.addedNodes)
