@@ -18,6 +18,7 @@ var lastEventTriggerTime = {
 };
 var lastClickXpath = '';
 var teemoInPickProcess = false;
+var teemoInHoverProcess = false;
 var teemoinPickingStart = false;
 var currentPickXpath = '';
 var currentPickAttribute = "";
@@ -46,11 +47,11 @@ function teemoProcessPick(event) {
         let pat = /(.*\[)(\d+)(\].*)/;
         let mbb = bb[3].match(pat)
         let idx = parseInt(mbb[2])
-        console.log(`idx: ${idx}`)
-        console.log(`appendedAmount: ${appendedAmount}`)
+        // console.log(`idx: ${idx}`)
+        // console.log(`appendedAmount: ${appendedAmount}`)
         if (idx >= (appendedAmount)) idx = (idx - 2)
         bb[3] = `${mbb[1]}${idx}${mbb[3]}`
-        console.log(`idx: ${idx}`)
+        // console.log(`idx: ${idx}`)
         cxpath = bb.join('/');
     }
     currentPickXpath = cxpath;
@@ -70,6 +71,32 @@ function teemoProcessPick(event) {
         `
     card.appendChild(item);
     document.getElementById("teemo-pick").style = `display: block; top:${top}px; left: ${left}px`;
+}
+
+function teemoProcessHover(event) {
+    let cxpath = teemoGetElementXPath(event.toElement);
+    let bb = cxpath.split('/');
+    if (bb[3].indexOf('[') != -1) {
+        let pat = /(.*\[)(\d+)(\].*)/;
+        let mbb = bb[3].match(pat)
+        let idx = parseInt(mbb[2])
+        // console.log(`idx: ${idx}`)
+        // console.log(`appendedAmount: ${appendedAmount}`)
+        if (idx >= (appendedAmount)) idx = (idx - 2)
+        bb[3] = `${mbb[1]}${idx}${mbb[3]}`
+        // console.log(`idx: ${idx}`)
+        cxpath = bb.join('/');
+    }
+    currentPickXpath = cxpath;
+    teemoScenerioData.steps.push({
+        action: 'hover',
+        xpath: currentPickXpath,
+        time: 1,
+        tips: '默认悬停1秒'
+    })
+    lastAction = "hover";
+    teemoInHoverProcess = false;
+    rebuildStepCards();
 }
 
 function teemoPickChange(attribute) {
@@ -99,7 +126,11 @@ function teemoTraceOnclickHandler(event) {
         } else {
             return;
         }
-    } else {
+    } else if (teemoInHoverProcess) {
+        lastEventTriggerTime.click = new Date().getTime()
+        teemoProcessHover(event);
+    }
+    else {
         if (shouldIgnoreThisEvent(lastEventTriggerTime.click)) {
             return;
         }
@@ -109,11 +140,8 @@ function teemoTraceOnclickHandler(event) {
             let pat = /(.*\[)(\d+)(\].*)/;
             let mbb = bb[3].match(pat)
             let idx = parseInt(mbb[2])
-            console.log(`idx: ${idx}`)
-            console.log(`appendedAmount: ${appendedAmount}`)
             if (idx >= (appendedAmount)) idx = (idx - 2)
             bb[3] = `${mbb[1]}${idx}${mbb[3]}`
-            console.log(`idx: ${idx}`)
             cxpath = bb.join('/')
         }
         if (cxpath == lastClickXpath) return;
@@ -133,6 +161,10 @@ function teemoTraceOnclickHandler(event) {
 
 function startPickProcess() {
     teemoInPickProcess = true;
+}
+
+function startHoverProcess() {
+    teemoInHoverProcess = true;
 }
 
 function teemoTraceInputHandler(element) {
@@ -220,7 +252,7 @@ function teemoInjectListenerInEveryNode(nextRoots) {
     if (nextRoots.length == 0) return;
     nextRoots.forEach(currentNode => {
         if (currentNode.className && currentNode.className.indexOf && currentNode.className.indexOf("teemo") != -1) {
-            console.log('teemo component needless registy listener')
+            // console.log('teemo component needless registy listener')
             return;
         } 
         teemoInjectListenerInEveryNode(currentNode.childNodes);
@@ -333,6 +365,17 @@ function rebuildStepCards() {
                 <span   class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
             </div>
         `
+        } else if (step.action == "hover") {
+            stepCard.innerHTML = `
+            <div  id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
+            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
+            <div  class=" teemo "  > 
+                <div  class=" teemo "  >action: ${step.action}</div><br/>
+                <span class=" teemo " >xpath:</span><input onchange='modifyXpath(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.xpath}"     /><br/><br/>
+                <span  class=" teemo "  >time/s:  </span><input  onchange='modifyTime(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.time}"   /><br/><br/>
+                <span   class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
+            </div>
+        `
         } else if (step.action == "assert") {
             stepCard.innerHTML = `
             <div  id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
@@ -381,6 +424,7 @@ function addExpression() {
     rebuildStepCards();
 }
 
+
 function addAssert() {
     teemoScenerioData.steps.push({
         action: "assert",
@@ -418,12 +462,12 @@ document.addEventListener("keydown", function(event) {
 var teemoObserveRootNode = document.body;
 var teemoObserveConfig = {childList: true, subtree: true };
 function teemoObserveEventHandler (mutationsList) {
-    console.log("监听到变化")
+    // console.log("监听到变化")
     for(let mutation of mutationsList) {
         if (mutation.target.className.indexOf("teemo") == -1) {
             teemoInjectListenerInEveryNode(mutation.addedNodes)
         } else {
-            console.log("teemo dom needless registy listener")
+            // console.log("teemo dom needless registy listener")
         }
     }
 };

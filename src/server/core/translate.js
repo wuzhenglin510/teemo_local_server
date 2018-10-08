@@ -47,6 +47,7 @@ function compile(step) {
         case 'input': return compileInput(step);
         case 'sleep': return compileSleep(step);
         case 'assert': return compileAssert(step);
+        case 'hover': return compileHover(step);
         case 'pick': return compilePick(step);
         case 'exp': return compileExp(step);
         case 'keydown': return compileKeydown(step);
@@ -62,6 +63,9 @@ function compileGo(step) {
 function compileClick(step) {
     return `await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).isDisplayed();
             await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).click();`;
+}
+function compileHover(step) {
+    return `await Driver.actions({bridge: true}).move({duration: ${step.time * 1000}, origin: await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000)}).perform();`
 }
 
 function compileKeydown(step) {

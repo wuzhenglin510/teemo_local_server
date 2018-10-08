@@ -34,6 +34,7 @@ function teemoCreateGroupToolbar() {
     <button class="teemo teemo-tool-assert" onclick="addAssert()">Assert</button>
     <button class="teemo teemo-tool-pick" onclick="startPickProcess()">Pick</button>
     <button class="teemo teemo-tool-exp" onclick="addExpression()">Exp</button>
+    <button class="teemo teemo-tool-hover" onclick="startHoverProcess()">Hover</button>
     <div id="teemo-pick" class="teemo-pick" style="display:none">
         <div id="teemo-pick-card" class="card teemo-pick-card">
         </div>
