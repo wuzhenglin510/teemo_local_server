@@ -21,8 +21,8 @@ var teemoInPickProcess = false;
 var teemoInHoverProcess = false;
 var teemoinPickingStart = false;
 var currentPickXpath = '';
-var currentPickAttribute = "";
-var lastAction = "";
+var currentPickAttribute = '';
+var lastAction = '';
 
 function shouldIgnoreThisEvent(last) {
     let now = new Date().getTime();
@@ -31,10 +31,10 @@ function shouldIgnoreThisEvent(last) {
 
 
 function teemoCreatePrepare() {
-    var prepare = document.createElement("DIV");
+    var prepare = document.createElement('DIV');
     prepare.id = 'teemo-waiting-finish';
-    prepare.className = "teemo teemo-waiting-finish teemo-hide";
-    prepare.innerHTML = `<h1 class="teemo teemo-prepare">渲染中，请稍等</h1>`;
+    prepare.className = 'teemo teemo-waiting-finish teemo-hide';
+    prepare.innerHTML = `<h1 class='teemo teemo-prepare'>渲染中，请稍等</h1>`;
     document.body.appendChild(prepare);
 }
 
@@ -43,7 +43,7 @@ function teemoProcessPick(event) {
     let left = event.clientX;
     let cxpath = teemoGetElementXPath(event.toElement);
     let bb = cxpath.split('/');
-    if (bb[3].indexOf('[') != -1) {
+    if (bb[3] && bb[3].indexOf('[') != -1) {
         let pat = /(.*\[)(\d+)(\].*)/;
         let mbb = bb[3].match(pat)
         let idx = parseInt(mbb[2])
@@ -55,28 +55,28 @@ function teemoProcessPick(event) {
         cxpath = bb.join('/');
     }
     currentPickXpath = cxpath;
-    let card = document.getElementById("teemo-pick-card");
-    card.innerHTML = "";
+    let card = document.getElementById('teemo-pick-card');
+    card.innerHTML = '';
     
     for (let attribute of event.target.attributes) {
-        let item = document.createElement("div");
+        let item = document.createElement('div');
         item.innerHTML = `
-        <label class="teemo-pick-radio"><input type="radio" onchange="teemoPickChange('${attribute.name}')" name="teemo-pick-input" value="${attribute.name}" /><span class="teemo-pick-outer"><span class="teemo-pick-inner"></span></span>${attribute.name} --> ${attribute.value}</label>
+        <label class='teemo-pick-radio'><input type='radio' onchange='teemoPickChange('${attribute.name}')' name='teemo-pick-input' value='${attribute.name}' /><span class='teemo-pick-outer'><span class='teemo-pick-inner'></span></span>${attribute.name} --> ${attribute.value}</label>
         `
         card.appendChild(item);
     }
-    let item = document.createElement("div");
+    let item = document.createElement('div');
     item.innerHTML = `
-        <label class="teemo-pick-radio"><input type="radio" onchange="teemoPickChange('innerText')" name="teemo-pick-input" value="innerText" /><span class="teemo-pick-outer"><span class="teemo-pick-inner"></span></span>innerText --> ${event.target.innerText}</label>
+        <label class='teemo-pick-radio'><input type='radio' onchange='teemoPickChange('innerText')' name='teemo-pick-input' value='innerText' /><span class='teemo-pick-outer'><span class='teemo-pick-inner'></span></span>innerText --> ${event.target.innerText}</label>
         `
     card.appendChild(item);
-    document.getElementById("teemo-pick").style = `display: block; top:${top}px; left: ${left}px`;
+    document.getElementById('teemo-pick').style = `display: block; top:${top}px; left: ${left}px`;
 }
 
 function teemoProcessHover(event) {
     let cxpath = teemoGetElementXPath(event.toElement);
     let bb = cxpath.split('/');
-    if (bb[3].indexOf('[') != -1) {
+    if (bb[3] && bb[3].indexOf('[') != -1) {
         let pat = /(.*\[)(\d+)(\].*)/;
         let mbb = bb[3].match(pat)
         let idx = parseInt(mbb[2])
@@ -94,7 +94,7 @@ function teemoProcessHover(event) {
         time: 1,
         tips: '默认悬停1秒'
     })
-    lastAction = "hover";
+    lastAction = 'hover';
     teemoInHoverProcess = false;
     rebuildStepCards();
 }
@@ -113,8 +113,8 @@ function confirmPick() {
         variable: `p_${Math.floor(Math.random() * 100000)}`,
         tips: ''
     })
-    lastAction = "pick";
-    document.getElementById("teemo-pick").style = `display: none;`;
+    lastAction = 'pick';
+    document.getElementById('teemo-pick').style = `display: none;`;
     rebuildStepCards();
 }
 
@@ -136,7 +136,7 @@ function teemoTraceOnclickHandler(event) {
         }
         let cxpath = teemoGetElementXPath(event.toElement);
         let bb = cxpath.split('/');
-        if (bb[3].indexOf('[') != -1) {
+        if (bb[3] && bb[3].indexOf('[') != -1) {
             let pat = /(.*\[)(\d+)(\].*)/;
             let mbb = bb[3].match(pat)
             let idx = parseInt(mbb[2])
@@ -152,7 +152,7 @@ function teemoTraceOnclickHandler(event) {
             xpath: cxpath,
             tips: ''
         })
-        lastAction = "click";
+        lastAction = 'click';
         rebuildStepCards();
     }
     
@@ -174,7 +174,7 @@ function teemoTraceInputHandler(element) {
     }
     lastEventTriggerTime.input = new Date().getTime()
 
-    if (lastAction == "keydown" && (new Date().getTime() - lastEventTriggerTime.keydown) < 100) {
+    if (lastAction == 'keydown' && (new Date().getTime() - lastEventTriggerTime.keydown) < 100) {
         let trs = teemoScenerioData.steps[teemoScenerioData.steps.length -1];
         teemoScenerioData.steps[teemoScenerioData.steps.length -1] = {
             action: 'input',
@@ -191,7 +191,7 @@ function teemoTraceInputHandler(element) {
             tips: ''
         })
     }
-    lastAction = "input";
+    lastAction = 'input';
     rebuildStepCards();
 }
 
@@ -236,7 +236,7 @@ function modifyCode(idx, event) {
 function teemoPost(uri, data) {
     return new Promise(resolve => {
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", uri, true);
+        xhr.open('POST', uri, true);
         xhr.setRequestHeader('content-type', 'application/json');
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
@@ -251,18 +251,18 @@ function teemoPost(uri, data) {
 function teemoInjectListenerInEveryNode(nextRoots) {
     if (nextRoots.length == 0) return;
     nextRoots.forEach(currentNode => {
-        if (currentNode.className && currentNode.className.indexOf && currentNode.className.indexOf("teemo") != -1) {
+        if (currentNode.className && currentNode.className.indexOf && currentNode.className.indexOf('teemo') != -1) {
             // console.log('teemo component needless registy listener')
             return;
         } 
         teemoInjectListenerInEveryNode(currentNode.childNodes);
         currentNode.addEventListener('click', teemoTraceOnclickHandler, true);
-        if (currentNode.nodeName.toUpperCase() == "INPUT") {
-            if (currentNode.type.toLowerCase() != "radio" && currentNode.type.toLowerCase() != "checkbox") {
+        if (currentNode.nodeName.toUpperCase() == 'INPUT') {
+            if (currentNode.type.toLowerCase() != 'radio' && currentNode.type.toLowerCase() != 'checkbox') {
                 currentNode.addEventListener('change', teemoTraceInputHandler, true);
             }
         }
-        if (currentNode.nodeName.toUpperCase() == "TEXTAREA") {
+        if (currentNode.nodeName.toUpperCase() == 'TEXTAREA') {
             currentNode.addEventListener('change', teemoTraceInputHandler, true);
         }
     })
@@ -294,106 +294,106 @@ function rebuildStepCards() {
     for (let idx = 0; idx < teemoScenerioData.steps.length; idx++) {
         let step = teemoScenerioData.steps[idx];
         let stepCard = document.createElement('div');
-        stepCard.className = "teemo teemo-one-step-container";
+        stepCard.className = 'teemo teemo-one-step-container';
         if (step.action == 'click') {
             stepCard.innerHTML = `
-            <div id='removeStepCard_${idx}' class=" teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})"    >X</div>
-            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
-            <div class=" teemo " > 
-                <div   class=" teemo " >action: ${step.action}</div><br/>
-                <span class=" teemo " >xpath:</span><input onchange='modifyXpath(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.xpath}"     /><br/><br/>
-                <span class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'  class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
+            <div id='removeStepCard_${idx}' class=' teemo teemo-one-container-close' onclick='teemoRemoveStep(${idx})'    >X</div>
+            <div id='upStepCard_${idx}' class=' teemo teemo-one-container-up' onclick='teemoUpStep(${idx})'    >↑</div>
+            <div class=' teemo ' > 
+                <div   class=' teemo ' >action: ${step.action}</div><br/>
+                <span class=' teemo ' >xpath:</span><input onchange='modifyXpath(${idx}, event)' class='teemo teemo-step-card-value' type='text' value='${step.xpath}'     /><br/><br/>
+                <span class=' teemo ' >tips: </span><input onchange='modifyTips(${idx}, event)'  class='teemo teemo-step-card-tips' type='text' value='${step.tips}' />
             </div>
         `
         } else if(step.action == 'input') {
             stepCard.innerHTML = `
-            <div id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})"  >X</div>
-            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
-            <div  class=" teemo "  > 
-                <div  class=" teemo "  >action: ${step.action}</div><br/>
-                <div  class=" teemo "  >
+            <div id='removeStepCard_${idx}' class='teemo teemo-one-container-close' onclick='teemoRemoveStep(${idx})'  >X</div>
+            <div id='upStepCard_${idx}' class=' teemo teemo-one-container-up' onclick='teemoUpStep(${idx})'    >↑</div>
+            <div  class=' teemo '  > 
+                <div  class=' teemo '  >action: ${step.action}</div><br/>
+                <div  class=' teemo '  >
                     valType: 
-                    <input type="radio" onchange="modifyInputValueType(${idx}, 'text')" class="teemo" ${step.valType == 'text' ? 'checked="checked"' : ''}  name="teemo_input_value_type_${idx}" value="text">
-                    <label class="teemo">t</label>
-                    <input type="radio" onchange="modifyInputValueType(${idx}, 'code')" class="teemo" ${step.valType == 'code' ? 'checked="checked"' : ''}  name="teemo_input_value_type_${idx}" value="code">
-                    <label class="teemo">c</label>
+                    <input type='radio' onchange='modifyInputValueType(${idx}, 'text')' class='teemo' ${step.valType == 'text' ? checked='checked' : ''}  name='teemo_input_value_type_${idx}' value='text'>
+                    <label class='teemo'>t</label>
+                    <input type='radio' onchange='modifyInputValueType(${idx}, 'code')' class='teemo' ${step.valType == 'code' ? checked='checked' : ''}  name='teemo_input_value_type_${idx}' value='code'>
+                    <label class='teemo'>c</label>
                 </div ><br/>
-                <span  class=" teemo "  >value:</span><input onchange='modifyValue(${idx}, event)'  class="teemo teemo-step-card-value" type="text" value="${step.value}"   /><br/><br/>
-                <span  class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
+                <span  class=' teemo '  >value:</span><input onchange='modifyValue(${idx}, event)'  class='teemo teemo-step-card-value' type='text' value='${step.value}'   /><br/><br/>
+                <span  class=' teemo ' >tips: </span><input onchange='modifyTips(${idx}, event)'   class='teemo teemo-step-card-tips' type='text' value='${step.tips}' />
             </div>
         `
         } else if (step.action == 'go') {
             stepCard.innerHTML = `
-            <div  id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
-            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
-            <div  class=" teemo "  > 
-                <div  class=" teemo "  >action: ${step.action}</div><br/>
-                <span  class=" teemo "  >url:  </span><input onchange='modifyUrl(${idx}, event)'  class="teemo teemo-step-card-value" type="text" value="${step.url}"   /><br/><br/>
-                <span   class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
+            <div  id='removeStepCard_${idx}' class='teemo teemo-one-container-close' onclick='teemoRemoveStep(${idx})'>X</div>
+            <div id='upStepCard_${idx}' class=' teemo teemo-one-container-up' onclick='teemoUpStep(${idx})'    >↑</div>
+            <div  class=' teemo '  > 
+                <div  class=' teemo '  >action: ${step.action}</div><br/>
+                <span  class=' teemo '  >url:  </span><input onchange='modifyUrl(${idx}, event)'  class='teemo teemo-step-card-value' type='text' value='${step.url}'   /><br/><br/>
+                <span   class=' teemo ' >tips: </span><input onchange='modifyTips(${idx}, event)'   class='teemo teemo-step-card-tips' type='text' value='${step.tips}' />
             </div>
         `
-        } else if (step.action == "sleep") {
+        } else if (step.action == 'sleep') {
             stepCard.innerHTML = `
-            <div  id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
-            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
-            <div  class=" teemo "  > 
-                <div  class=" teemo "  >action: ${step.action}</div><br/>
-                <span  class=" teemo "  >time/s:  </span><input  onchange='modifyTime(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.time}"   /><br/><br/>
-                <span   class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
+            <div  id='removeStepCard_${idx}' class='teemo teemo-one-container-close' onclick='teemoRemoveStep(${idx})'>X</div>
+            <div id='upStepCard_${idx}' class=' teemo teemo-one-container-up' onclick='teemoUpStep(${idx})'    >↑</div>
+            <div  class=' teemo '  > 
+                <div  class=' teemo '  >action: ${step.action}</div><br/>
+                <span  class=' teemo '  >time/s:  </span><input  onchange='modifyTime(${idx}, event)' class='teemo teemo-step-card-value' type='text' value='${step.time}'   /><br/><br/>
+                <span   class=' teemo ' >tips: </span><input onchange='modifyTips(${idx}, event)'   class='teemo teemo-step-card-tips' type='text' value='${step.tips}' />
             </div>
         `
-        } else if (step.action == "pick") {
+        } else if (step.action == 'pick') {
             stepCard.innerHTML = `
-            <div  id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
-            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
-            <div  class=" teemo "  > 
-                <div  class=" teemo "  >action: ${step.action}</div><br/>
-                <span  class=" teemo "  >attr:  </span><input  onchange='modifyAttribute(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.attribute}"   /><br/><br/>
-                <span class=" teemo " >xpath:</span><input onchange='modifyXpath(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.xpath}"     /><br/><br/>
-                <span  class=" teemo "  >vname:  </span><input  onchange='modifyVariable(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.variable}"   /><br/><br/>
-                <span   class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
+            <div  id='removeStepCard_${idx}' class='teemo teemo-one-container-close' onclick='teemoRemoveStep(${idx})'>X</div>
+            <div id='upStepCard_${idx}' class=' teemo teemo-one-container-up' onclick='teemoUpStep(${idx})'    >↑</div>
+            <div  class=' teemo '  > 
+                <div  class=' teemo '  >action: ${step.action}</div><br/>
+                <span  class=' teemo '  >attr:  </span><input  onchange='modifyAttribute(${idx}, event)' class='teemo teemo-step-card-value' type='text' value='${step.attribute}'   /><br/><br/>
+                <span class=' teemo ' >xpath:</span><input onchange='modifyXpath(${idx}, event)' class='teemo teemo-step-card-value' type='text' value='${step.xpath}'     /><br/><br/>
+                <span  class=' teemo '  >vname:  </span><input  onchange='modifyVariable(${idx}, event)' class='teemo teemo-step-card-value' type='text' value='${step.variable}'   /><br/><br/>
+                <span   class=' teemo ' >tips: </span><input onchange='modifyTips(${idx}, event)'   class='teemo teemo-step-card-tips' type='text' value='${step.tips}' />
             </div>
         `
-        } else if (step.action == "exp") {
+        } else if (step.action == 'exp') {
             stepCard.innerHTML = `
-            <div  id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
-            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
-            <div  class=" teemo "  > 
-                <div  class=" teemo "  >action: ${step.action}</div><br/>
-                <span  class=" teemo "  >code:  </span><input  onchange='modifyCode(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.code}"   /><br/><br/>
-                <span  class=" teemo "  >vname:  </span><input  onchange='modifyVariable(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.variable}"   /><br/><br/>
-                <span   class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
+            <div  id='removeStepCard_${idx}' class='teemo teemo-one-container-close' onclick='teemoRemoveStep(${idx})'>X</div>
+            <div id='upStepCard_${idx}' class=' teemo teemo-one-container-up' onclick='teemoUpStep(${idx})'    >↑</div>
+            <div  class=' teemo '  > 
+                <div  class=' teemo '  >action: ${step.action}</div><br/>
+                <span  class=' teemo '  >code:  </span><input  onchange='modifyCode(${idx}, event)' class='teemo teemo-step-card-value' type='text' value='${step.code}'   /><br/><br/>
+                <span  class=' teemo '  >vname:  </span><input  onchange='modifyVariable(${idx}, event)' class='teemo teemo-step-card-value' type='text' value='${step.variable}'   /><br/><br/>
+                <span   class=' teemo ' >tips: </span><input onchange='modifyTips(${idx}, event)'   class='teemo teemo-step-card-tips' type='text' value='${step.tips}' />
             </div>
         `
-        } else if (step.action == "hover") {
+        } else if (step.action == 'hover') {
             stepCard.innerHTML = `
-            <div  id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
-            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
-            <div  class=" teemo "  > 
-                <div  class=" teemo "  >action: ${step.action}</div><br/>
-                <span class=" teemo " >xpath:</span><input onchange='modifyXpath(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.xpath}"     /><br/><br/>
-                <span  class=" teemo "  >time/s:  </span><input  onchange='modifyTime(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.time}"   /><br/><br/>
-                <span   class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
+            <div  id='removeStepCard_${idx}' class='teemo teemo-one-container-close' onclick='teemoRemoveStep(${idx})'>X</div>
+            <div id='upStepCard_${idx}' class=' teemo teemo-one-container-up' onclick='teemoUpStep(${idx})'    >↑</div>
+            <div  class=' teemo '  > 
+                <div  class=' teemo '  >action: ${step.action}</div><br/>
+                <span class=' teemo ' >xpath:</span><input onchange='modifyXpath(${idx}, event)' class='teemo teemo-step-card-value' type='text' value='${step.xpath}'     /><br/><br/>
+                <span  class=' teemo '  >time/s:  </span><input  onchange='modifyTime(${idx}, event)' class='teemo teemo-step-card-value' type='text' value='${step.time}'   /><br/><br/>
+                <span   class=' teemo ' >tips: </span><input onchange='modifyTips(${idx}, event)'   class='teemo teemo-step-card-tips' type='text' value='${step.tips}' />
             </div>
         `
-        } else if (step.action == "assert") {
+        } else if (step.action == 'assert') {
             stepCard.innerHTML = `
-            <div  id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
-            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
-            <div  class=" teemo "  > 
-                <div  class=" teemo "  >action: ${step.action}</div><br/>
-                <span  class=" teemo "  >code:  </span><input  onchange='modifyCode(${idx}, event)' class="teemo teemo-step-card-value" type="text" value="${step.code}"   /><br/><br/>
-                <span   class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
+            <div  id='removeStepCard_${idx}' class='teemo teemo-one-container-close' onclick='teemoRemoveStep(${idx})'>X</div>
+            <div id='upStepCard_${idx}' class=' teemo teemo-one-container-up' onclick='teemoUpStep(${idx})'    >↑</div>
+            <div  class=' teemo '  > 
+                <div  class=' teemo '  >action: ${step.action}</div><br/>
+                <span  class=' teemo '  >code:  </span><input  onchange='modifyCode(${idx}, event)' class='teemo teemo-step-card-value' type='text' value='${step.code}'   /><br/><br/>
+                <span   class=' teemo ' >tips: </span><input onchange='modifyTips(${idx}, event)'   class='teemo teemo-step-card-tips' type='text' value='${step.tips}' />
             </div>
         `
-        } else if (step.action == "keydown") {
+        } else if (step.action == 'keydown') {
             stepCard.innerHTML = `
-            <div  id='removeStepCard_${idx}' class="teemo teemo-one-container-close" onclick="teemoRemoveStep(${idx})">X</div>
-            <div id='upStepCard_${idx}' class=" teemo teemo-one-container-up" onclick="teemoUpStep(${idx})"    >↑</div>
-            <div  class=" teemo "  > 
-                <div  class=" teemo "  >action: ${step.action}</div><br/>
-                <span  class=" teemo "  >code:  </span><input  class="teemo teemo-step-card-value" type="text" value="${step.key}"  disabled="disabled" /><br/><br/>
-                <span   class=" teemo " >tips: </span><input onchange='modifyTips(${idx}, event)'   class="teemo teemo-step-card-tips" type="text" value="${step.tips}" />
+            <div  id='removeStepCard_${idx}' class='teemo teemo-one-container-close' onclick='teemoRemoveStep(${idx})'>X</div>
+            <div id='upStepCard_${idx}' class=' teemo teemo-one-container-up' onclick='teemoUpStep(${idx})'    >↑</div>
+            <div  class=' teemo '  > 
+                <div  class=' teemo '  >action: ${step.action}</div><br/>
+                <span  class=' teemo '  >code:  </span><input  class='teemo teemo-step-card-value' type='text' value='${step.key}'  disabled='disabled' /><br/><br/>
+                <span   class=' teemo ' >tips: </span><input onchange='modifyTips(${idx}, event)'   class='teemo teemo-step-card-tips' type='text' value='${step.tips}' />
             </div>
         `
         }
@@ -409,7 +409,7 @@ function addWait() {
         time: 1,
         tips: ''
     })
-    lastAction = "wait";
+    lastAction = 'wait';
     rebuildStepCards();
 }
 
@@ -420,39 +420,39 @@ function addExpression() {
         variable: `p_${Math.floor(Math.random() * 100000)}`,
         tips: ''
     })
-    lastAction = "exp";
+    lastAction = 'exp';
     rebuildStepCards();
 }
 
 
 function addAssert() {
     teemoScenerioData.steps.push({
-        action: "assert",
+        action: 'assert',
         code: '',
         tips: ''
     })
-    lastAction = "assert";
+    lastAction = 'assert';
     rebuildStepCards();
 }
 
-document.addEventListener("keydown", function(event) {
-    if(event.code == "Enter") {
+document.addEventListener('keydown', function(event) {
+    if(event.code == 'Enter') {
         teemoScenerioData.steps.push({
-            action: "keydown",
+            action: 'keydown',
             key: 'Enter',
             tips: 'tap key Enter'
         });
         lastEventTriggerTime.keydown = new Date().getTime();
-        lastAction = "keydown";
+        lastAction = 'keydown';
         rebuildStepCards();
-    } else if (event.code == "Tab") {
+    } else if (event.code == 'Tab') {
         teemoScenerioData.steps.push({
-            action: "keydown",
+            action: 'keydown',
             key: 'Tab',
             tips: 'tap key Tab'
         });
         lastEventTriggerTime.keydown = new Date().getTime();
-        lastAction = "keydown";
+        lastAction = 'keydown';
         rebuildStepCards();
     }
     
@@ -462,12 +462,12 @@ document.addEventListener("keydown", function(event) {
 var teemoObserveRootNode = document.body;
 var teemoObserveConfig = {childList: true, subtree: true };
 function teemoObserveEventHandler (mutationsList) {
-    // console.log("监听到变化")
+    // console.log('监听到变化')
     for(let mutation of mutationsList) {
-        if (mutation.target.className.indexOf("teemo") == -1) {
+        if (mutation.target.className.indexOf('teemo') == -1) {
             teemoInjectListenerInEveryNode(mutation.addedNodes)
         } else {
-            // console.log("teemo dom needless registy listener")
+            // console.log('teemo dom needless registy listener')
         }
     }
 };
