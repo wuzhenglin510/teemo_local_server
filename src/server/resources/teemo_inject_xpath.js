@@ -1,8 +1,5 @@
 function teemoGetElementXPath(element) {
-    if (element && element.id)
-        return '//*[@id="' + element.id + '"]';
-    else
-        return teemoGetElementTreeXPath(element);
+    return teemoGetElementTreeXPath(element);
 }
 
 function teemoGetElementTreeXPath(element) {

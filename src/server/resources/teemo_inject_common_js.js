@@ -313,9 +313,9 @@ function rebuildStepCards() {
                 <div  class=' teemo '  >action: ${step.action}</div><br/>
                 <div  class=' teemo '  >
                     valType: 
-                    <input type='radio' onchange='modifyInputValueType(${idx}, 'text')' class='teemo' ${step.valType == 'text' ? checked='checked' : ''}  name='teemo_input_value_type_${idx}' value='text'>
+                    <input type='radio' onchange='modifyInputValueType(${idx}, "text")' class='teemo' ${step.valType == 'text' ? checked='checked' : ''}  name='teemo_input_value_type_${idx}' value='text'>
                     <label class='teemo'>t</label>
-                    <input type='radio' onchange='modifyInputValueType(${idx}, 'code')' class='teemo' ${step.valType == 'code' ? checked='checked' : ''}  name='teemo_input_value_type_${idx}' value='code'>
+                    <input type='radio' onchange='modifyInputValueType(${idx}, "code")' class='teemo' ${step.valType == 'code' ? checked='checked' : ''}  name='teemo_input_value_type_${idx}' value='code'>
                     <label class='teemo'>c</label>
                 </div ><br/>
                 <span  class=' teemo '  >value:</span><input onchange='modifyValue(${idx}, event)'  class='teemo teemo-step-card-value' type='text' value='${step.value}'   /><br/><br/>
