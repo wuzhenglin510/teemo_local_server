@@ -102,7 +102,7 @@ function compileAssert(step) {
 }
 
 function _compileExtractValue(step) {
-    if (step.attribute != "innerText") {
+    if (step.attribute) {
         return `await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).isDisplayed();
                 let ${step.variable} = await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).getAttribute('${step.attributeName}');`;
     }

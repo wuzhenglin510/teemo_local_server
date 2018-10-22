@@ -22,16 +22,30 @@ module.exports = async ({body, query}) => {
             shell.cp(path.join(__dirname, '../../core/test_env/mac/geckodriver'), path.join(ProjectRoot, 'build', 'geckodriver')); 
         }
     } else if(os.platform().indexOf("win") != -1) {
-        shell.rm(`${path.join(ProjectRoot, 'build', 'chromedriver.exe')}`)
-        shell.rm(`${path.join(ProjectRoot, 'build', 'geckodriver.exe')}`)
-        shell.rm(`${path.join(ProjectRoot, 'build', 'IEDriverServer.exe')}`)
-        shell.rm(`${path.join(ProjectRoot, 'build', 'MicrosoftWebDriver.exe')}`)
         switch(body.browser) {
-            case 'Chrome': shell.cp(path.join(__dirname, '../../core/test_env/win/chromedriver.exe'), path.join(ProjectRoot, 'build', 'chromedriver.exe')); break;
-            case 'Firefox': shell.cp(path.join(__dirname, '../../core/test_env/win/geckodriver.exe'), path.join(ProjectRoot, 'build', 'geckodriver.exe')); break;
-            case '360': shell.cp(path.join(__dirname, '../../core/test_env/win/360.exe'), path.join(ProjectRoot, 'build', 'chromedriver.exe')); break;
-            case 'Edge': shell.cp(path.join(__dirname, '../../core/test_env/win/MicrosoftWebDriver.exe'), path.join(ProjectRoot, 'build', 'MicrosoftWebDriver.exe')); break;
-            case 'IE': shell.cp(path.join(__dirname, '../../core/test_env/win/IEDriverServer.exe'), path.join(ProjectRoot, 'build', 'IEDriverServer.exe')); break;
+            case 'Chrome': {
+                shell.exec("taskkill /f /t /im chromedriver.exe")
+                shell.rm(`${path.join(ProjectRoot, 'build', 'chromedriver.exe')}`)
+                shell.cp(path.join(__dirname, '../../core/test_env/win/chromedriver.exe'), path.join(ProjectRoot, 'build', 'chromedriver.exe')); break;
+            } 
+            case 'Firefox': {
+                shell.exec("taskkill /f /t /im geckodriver.exe")
+                shell.rm(`${path.join(ProjectRoot, 'build', 'geckodriver.exe')}`)
+                shell.cp(path.join(__dirname, '../../core/test_env/win/geckodriver.exe'), path.join(ProjectRoot, 'build', 'geckodriver.exe')); break;
+            } 
+            case '360': {
+                shell.cp(path.join(__dirname, '../../core/test_env/win/360.exe'), path.join(ProjectRoot, 'build', 'chromedriver.exe')); break;
+            } 
+            case 'Edge': {
+                shell.exec("taskkill /f /t /im MicrosoftWebDriver.exe")
+                shell.rm(`${path.join(ProjectRoot, 'build', 'MicrosoftWebDriver.exe')}`)
+                shell.cp(path.join(__dirname, '../../core/test_env/win/MicrosoftWebDriver.exe'), path.join(ProjectRoot, 'build', 'MicrosoftWebDriver.exe')); break;
+            }
+            case 'IE': {
+                shell.exec("taskkill /f /t /im IEDriverServer.exe")
+                shell.rm(`${path.join(ProjectRoot, 'build', 'IEDriverServer.exe')}`)
+                shell.cp(path.join(__dirname, '../../core/test_env/win/IEDriverServer.exe'), path.join(ProjectRoot, 'build', 'IEDriverServer.exe')); break;
+            }
             default: return {
                 code: 4
             }
