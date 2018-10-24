@@ -10,7 +10,7 @@ module.exports = async ({body, query}) => {
     //初始化环境
     fs.writeFileSync(path.join(ProjectRoot, "build/env"), JSON.stringify({
         browser: body.browser,
-        root: `${ProjectRoot}/build`,
+        root: `${ProjectRoot}/build/test`,
         type: 'scenerio'
     }), {encoding:'utf8',flag:'w'})
     if (os.platform().indexOf("darwin") != -1) {
@@ -54,22 +54,22 @@ module.exports = async ({body, query}) => {
 
     if (!body.runAll) {
         let realPath = path.join(ProjectRoot, 'raw/scenerio', body.scenerioName);
-        let compiled = build(realPath, path.join(ProjectRoot, 'build/scenerio', `${body.scenerioName}.js`));
+        let compiled = build(realPath, path.join(ProjectRoot, 'build/test/scenerio', `${body.scenerioName}.js`));
         if (os.platform().indexOf("darwin") != -1) {
             child_process.exec(`osascript -e 'tell application "Terminal" to do script "cd ${path.join(ProjectRoot, 'build')} && mocha run.js  -g ${body.scenerioName}"'`)
         } else if(os.platform().indexOf("win") != -1) {
-            child_process.exec(`start cmd.exe @cmd /k "cd ${path.join(ProjectRoot, 'build')} & mocha run.js  -g ${body.scenerioName}"`)
+            child_process.exec(`start cmd.exe @cmd /k "cd ${path.join(ProjectRoot, 'build')} & mocha --require intelli-espower-loader run.js  -g ${body.scenerioName}"`)
         }
     } else {
         let scenerioFiles = fs.readdirSync(path.join(ProjectRoot, 'raw/scenerio'));
         scenerioFiles.forEach(filename => {
             let realPath = path.join(ProjectRoot, 'raw/scenerio', filename);
-            let compiled = build(realPath, path.join(ProjectRoot, 'build/scenerio', `${filename}.js`));
+            let compiled = build(realPath, path.join(ProjectRoot, 'build/test/scenerio', `${filename}.js`));
         });
         if (os.platform().indexOf("darwin") != -1) {
             child_process.exec(`osascript -e 'tell application "Terminal" to do script "cd ${path.join(ProjectRoot, 'build')} && mocha run.js ${body.silence ? '' : '-b'} -g \"${body.scenerioName}\" "'`)
         } else if(os.platform().indexOf("win") != -1) {
-            child_process.exec(`start cmd.exe @cmd /k "cd ${path.join(ProjectRoot, 'build')} & mocha run.js ${body.silence ? '' : '-b'} -g \"${body.scenerioName}\" "`)
+            child_process.exec(`start cmd.exe @cmd /k "cd ${path.join(ProjectRoot, 'build')} & mocha --require intelli-espower-loader run.js ${body.silence ? '' : '-b'} -g \"${body.scenerioName}\" "`)
         }
     }  
     return {
