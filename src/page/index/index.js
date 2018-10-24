@@ -7,7 +7,7 @@ const os = require('os')
 const child_process = require("child_process")
 const rp = require("request-promise")
 
-const VERSION = 0;
+const VERSION = 1;
 
 let status = false;
 let directory = '';

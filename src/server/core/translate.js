@@ -108,5 +108,5 @@ function _compileExtractValue(step) {
                 let ${step.variable} = await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).getAttribute('${step.attributeName}');`;
     }
     return `await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).isDisplayed();
-            let ${step.variable} = await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).getText();`
+            let ${step.variable} = (await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).getAttribute('innerText')).trim();`
 }
