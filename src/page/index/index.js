@@ -5,9 +5,22 @@ shell.config.execPath = shell.which('node').toString()
 const path = require('path')
 const os = require('os')
 const child_process = require("child_process")
+const rp = require("request-promise")
+
+const VERSION = 0;
 
 let status = false;
 let directory = '';
+
+async function checkUpdate() {
+    let body = JSON.parse(await rp("https://www.wuzhenglin.com/teemo/teemo_update.json"));
+    if (VERSION < body.version) {
+        alert(`${body.desc}\n当前版本号: ${VERSION}\n最新版本号: ${body.version}`);
+        child_process.exec(`start ${body.url}`);
+    }
+}
+
+checkUpdate()
 
 
 function toStart() {
