@@ -62,6 +62,7 @@ function compileGo(step) {
 
 function compileClick(step) {
     return `await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).isDisplayed();
+            await Driver.executeScript("arguments[0].scrollIntoView(true);", await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000));
             await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).click();`;
 }
 function compileHover(step) {
