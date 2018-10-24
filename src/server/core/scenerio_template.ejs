@@ -49,7 +49,9 @@ describe('<%= scenerioName %>', function () {
     });
 
     after(async function() {
-    	await Driver.close();
+        if (env.closeBrowser) {
+            await Driver.close();
+        }
   	});
 
 })

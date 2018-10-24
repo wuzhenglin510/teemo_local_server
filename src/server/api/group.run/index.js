@@ -12,7 +12,8 @@ module.exports = async ({body, query}) => {
     fs.writeFileSync(path.join(ProjectRoot, "build/env"), JSON.stringify({
         browser: body.browser,
         root: `${ProjectRoot}/build`,
-        type: 'group'
+        type: 'group',
+        closeBrowser: body.closeBrowser
     }), {encoding:'utf8',flag:'w'})
     if (os.platform().indexOf("darwin") != -1) {
         shell.rm(`${path.join(ProjectRoot, 'build', 'chromedriver')}`)
