@@ -79,9 +79,11 @@ function compileKeydown(step) {
 
 function compileInput(step) {
     if (step.valType == "code") {
-        return `await Driver.switchTo().activeElement().sendKeys(\`\$\{${step.value}\}\`);`;
+        return `await Driver.switchTo().activeElement().clear();
+                await Driver.switchTo().activeElement().sendKeys(\`\$\{${step.value}\}\`);`;
     } else {
-        return `await Driver.switchTo().activeElement().sendKeys('${step.value}');`;
+        return `await Driver.switchTo().activeElement().clear();
+                await Driver.switchTo().activeElement().sendKeys('${step.value}');`;
     }
 }
 
