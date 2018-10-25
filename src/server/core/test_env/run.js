@@ -11,9 +11,11 @@ describe('test', function() {
     })
 
     after(function () {
-        console.log('test case run finish, start clean process');
-        clean();
-        console.log('clean process finished');
+        if (env.closeBrowser) {
+            console.log('test case run finish, start clean process');
+            clean();
+            console.log('clean process finished');
+        }
     })
     
 });
