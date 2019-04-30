@@ -1,16 +1,16 @@
 const fs = require('fs')
 const startServer = require('../../server')
 const shell = require('shelljs')
-shell.config.execPath = shell.which('node').toString()
+// shell.config.execPath = shell.which('node').toString()
 const path = require('path')
 const os = require('os')
 const child_process = require("child_process")
 const rp = require("request-promise")
 
-const VERSION = 4;
+global.VERSION = 4;
 
-let status = false;
-let directory = '';
+global.status = false;
+global.directory = '';
 
 async function checkUpdate() {
     let body = JSON.parse(await rp("https://www.wuzhenglin.com/teemo/teemo_update.json"));
@@ -24,7 +24,7 @@ checkUpdate()
 
 
 function toStart() {
-    if (status == true) {
+    if (global.status == true) {
         alert('already started');
         return;
     }
