@@ -11,7 +11,7 @@ module.exports = async ({body, query}) => {
     //初始化环境
     fs.writeFileSync(path.join(ProjectRoot, "build/env"), JSON.stringify({
         browser: body.browser,
-        root: `${ProjectRoot}/build`,
+        root: `${ProjectRoot}/build/test`,
         type: 'group',
         closeBrowser: body.closeBrowser
     }), {encoding:'utf8',flag:'w'})
