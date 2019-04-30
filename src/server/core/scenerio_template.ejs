@@ -1,6 +1,6 @@
 const {By, until, Key, Builder} = require('selenium-webdriver');
 const {Options} = require('selenium-webdriver/chrome');
-const assert = require('assert');
+const assert = require('power-assert');
 
 describe('<%= scenerioName %>', function () {
 
@@ -44,11 +44,14 @@ describe('<%= scenerioName %>', function () {
     it('<%= scenerioName %>', async function () {
         <% steps.forEach(function(code){ %>
             <%- code %>
+            await Driver.sleep(300);
         <% }); %>
     });
 
     after(async function() {
-    	await Driver.close();
+        if (env.closeBrowser) {
+            await Driver.close();
+        }
   	});
 
 })

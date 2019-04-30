@@ -23,8 +23,8 @@ function processBefore(beforeName, beforeStepQueue) {
             }
             content.steps.forEach(step => {
                 stepCode = compile(step);
-                beforeStepQueue.push(stepCode)
-                beforeStepQueue.push(`// ${step.tips}`)
+                beforeStepQueue.push(`// ${step.tips}`);
+                beforeStepQueue.push(stepCode);
             })
         } else {
             throw new Error(`${realBeforePath} not exist`)
@@ -35,8 +35,8 @@ function processBefore(beforeName, beforeStepQueue) {
 function processSteps(steps, stepQueue) {
     steps.forEach(step => {
         stepCode = compile(step);
+        stepQueue.push(`// ${step.tips}`);
         stepQueue.push(stepCode);
-        stepQueue.push(`// ${step.tips}`)
     })
 }
 
@@ -47,6 +47,7 @@ function compile(step) {
         case 'input': return compileInput(step);
         case 'sleep': return compileSleep(step);
         case 'assert': return compileAssert(step);
+        case 'hover': return compileHover(step);
         case 'pick': return compilePick(step);
         case 'exp': return compileExp(step);
         case 'keydown': return compileKeydown(step);
@@ -60,7 +61,12 @@ function compileGo(step) {
 }
 
 function compileClick(step) {
-    return `await Driver.findElement(By.xpath('${step.xpath}')).click();`;
+    return `await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).isDisplayed();
+            await Driver.executeScript("arguments[0].scrollIntoView(true);", await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000));
+            await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).click();`;
+}
+function compileHover(step) {
+    return `await Driver.actions({bridge: true}).move({duration: ${step.time * 1000}, origin: await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000)}).perform();`
 }
 
 function compileKeydown(step) {
@@ -73,9 +79,11 @@ function compileKeydown(step) {
 
 function compileInput(step) {
     if (step.valType == "code") {
-        return `await Driver.switchTo().activeElement().sendKeys(\`\$\{${step.value}\}\`);`;
+        return `await Driver.switchTo().activeElement().clear();
+                await Driver.switchTo().activeElement().sendKeys(\`\$\{${step.value}\}\`);`;
     } else {
-        return `await Driver.switchTo().activeElement().sendKeys('${step.value}');`;
+        return `await Driver.switchTo().activeElement().clear();
+                await Driver.switchTo().activeElement().sendKeys('${step.value}');`;
     }
 }
 
@@ -85,7 +93,7 @@ function compileSleep(step) {
 
 
 function compilePick(step) {
-    return `let ${step.variable} = ${_compileExtractValue(step)}`;
+    return _compileExtractValue(step);
 }
 
 function compileExp(step) {
@@ -97,8 +105,10 @@ function compileAssert(step) {
 }
 
 function _compileExtractValue(step) {
-    if (step.attribute != "innerText") {
-        return `await Driver.findElement(By.xpath('${step.xpath}')).getAttribute('${tip.attributeName}');`;
+    if (step.attribute) {
+        return `await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).isDisplayed();
+                let ${step.variable} = await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).getAttribute('${step.attributeName}');`;
     }
-    return `await Driver.findElement(By.xpath('${step.xpath}')).getText();`
+    return `await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).isDisplayed();
+            let ${step.variable} = (await Driver.wait(until.elementLocated(By.xpath('${step.xpath}')), 10000).getAttribute('innerText')).trim();`
 }

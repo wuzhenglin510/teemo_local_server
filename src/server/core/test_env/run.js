@@ -11,52 +11,57 @@ describe('test', function() {
     })
 
     after(function () {
-        console.log('test case run finish, start clean process');
-        switch(env.browser) {
-            case 'Chrome': {
-                if (os.platform().indexOf("win") != -1) {
-                    child_process.exec(`taskkill /f /t /im chromedriver.exe`)
-                } else if (os.platform().indexOf("darwin") != -1) {
-
-                }
-            }
-            case 'Firefox': {
-                if (os.platform().indexOf("win") != -1) {
-                    child_process.exec(`taskkill /f /t /im geckodriver.exe`)
-                } else if (os.platform().indexOf("darwin") != -1) {
-
-                }
-            }
-            case '360': {
-                if (os.platform().indexOf("win") != -1) {
-                    child_process.exec(`taskkill /f /t /im chromedriver.exe`)
-                } else if (os.platform().indexOf("darwin") != -1) {
-
-                }
-            }
-            case 'Edge': {
-                if (os.platform().indexOf("win") != -1) {
-                    child_process.exec(`taskkill /f /t /im MicrosoftWebDriver.exe`)
-                } else if (os.platform().indexOf("darwin") != -1) {
-
-                }
-            }
-            case 'IE': {
-                if (os.platform().indexOf("win") != -1) {
-                    child_process.exec(`taskkill /f /t /im IEDriverServer.exe`)
-                } else if (os.platform().indexOf("darwin") != -1) {
-
-                }
-            }
-            case 'Safari': {
-                
-            }
+        if (env.closeBrowser) {
+            console.log('test case run finish, start clean process');
+            clean();
+            console.log('clean process finished');
         }
-        console.log('clean process finished');
     })
     
 });
 
+function clean() {
+    switch(env.browser) {
+        case 'Chrome': {
+            if (os.platform().indexOf("win") != -1) {
+                child_process.exec(`taskkill /f /t /im chromedriver.exe`)
+            } else if (os.platform().indexOf("darwin") != -1) {
+
+            }
+        }
+        case 'Firefox': {
+            if (os.platform().indexOf("win") != -1) {
+                child_process.exec(`taskkill /f /t /im geckodriver.exe`)
+            } else if (os.platform().indexOf("darwin") != -1) {
+
+            }
+        }
+        case '360': {
+            if (os.platform().indexOf("win") != -1) {
+                child_process.exec(`taskkill /f /t /im chromedriver.exe`)
+            } else if (os.platform().indexOf("darwin") != -1) {
+
+            }
+        }
+        case 'Edge': {
+            if (os.platform().indexOf("win") != -1) {
+                child_process.exec(`taskkill /f /t /im MicrosoftWebDriver.exe`)
+            } else if (os.platform().indexOf("darwin") != -1) {
+
+            }
+        }
+        case 'IE': {
+            if (os.platform().indexOf("win") != -1) {
+                child_process.exec(`taskkill /f /t /im IEDriverServer.exe`)
+            } else if (os.platform().indexOf("darwin") != -1) {
+
+            }
+        }
+        case 'Safari': {
+            
+        }
+    }
+}
 
 function testBefore() {
     global.env = JSON.parse(fs.readFileSync(path.join(__dirname, "env")).toString());

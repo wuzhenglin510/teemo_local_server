@@ -72,6 +72,17 @@
     border: ''!important;
 }
 
+.teemo-tool-hover {
+    height: 57px;
+    width: 56px;
+    border-right-color: white;
+    color: white;
+    background-color: #ffa9a9;
+    font-size: 10px !important;
+    font-weight: 100 !important;
+    border: ''!important;
+}
+
 #teemo-dragBoxBar {
     justify-content: space-between;
     background: #ccc!important;

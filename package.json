@@ -23,7 +23,10 @@
   },
   "dependencies": {
     "ejs": "^2.6.1",
+    "log4js": "^3.0.5",
     "node_power_server": "^1.1.12",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
     "selenium-webdriver": "^4.0.0-alpha.1",
     "shelljs": "^0.8.2"
   }
