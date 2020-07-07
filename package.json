@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/wuzhenglin510/teemo_local_server#readme",
   "devDependencies": {
-    "electron": "^2.0.0",
+    "electron": "^9.1.0",
     "electron-packager": "^9.1.0"
   },
   "dependencies": {
